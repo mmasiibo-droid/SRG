@@ -1,0 +1,9 @@
+flowchart LR
+  RAW[loyalty.customer_id and activity_at]
+  LAND[raw_landing with source and batch]
+  CLEAN[Normalize timestamp; exclude invalid/test records]
+  XW[Resolve reviewed golden_customer_id]
+  FACT[FactLoyaltyActivity]
+  KPI[Monthly active customers: distinct eligible golden IDs]
+  DASH[Board dashboard, month/channel filters]
+  RAW -->|extract manifest| LAND -->|validation rules| CLEAN -->|crosswalk version| XW -->|deduplicated event grain| FACT -->|calendar month and activity rule| KPI -->|semantic model refresh| DASH

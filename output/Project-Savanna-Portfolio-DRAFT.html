@@ -1,0 +1,2410 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><base href="file:///C:/Users/Nana/Desktop/SRG/docs/"><title>Project Savanna EDM Portfolio - Working Draft</title>
+<style>
+@page { size: A4; margin: 16mm 14mm 17mm; }
+* { box-sizing:border-box; }
+body { color:#172b3a; font:10pt/1.42 "Segoe UI",Arial,sans-serif; }
+h1 { color:#126b5b; font-size:23pt; line-height:1.15; margin:0 0 12pt; }
+h2 { color:#126b5b; font-size:15pt; margin:19pt 0 7pt; break-after:avoid; }
+h3 { color:#28465a; font-size:11pt; margin:12pt 0 5pt; break-after:avoid; }
+p { margin:0 0 7pt; orphans:3; widows:3; }
+ul,ol { margin:3pt 0 9pt 18pt; padding:0; }
+li { margin:0 0 3pt; }
+table { border-collapse:collapse; width:100%; margin:7pt 0 11pt; font-size:8pt; break-inside:auto; }
+tr { break-inside:avoid; }
+th { background:#eaf4f1; color:#172b3a; text-align:left; }
+th,td { border:0.5pt solid #bccbd2; padding:4pt 5pt; vertical-align:top; }
+blockquote { margin:8pt 0; padding:8pt 11pt; background:#fff6dc; border-left:3pt solid #d99b19; }
+code,pre { font-family:Consolas,"Courier New",monospace; font-size:7.5pt; }
+pre { white-space:pre-wrap; overflow-wrap:anywhere; border:0.5pt solid #d7e0e5; padding:7pt; background:#f6f8f9; }
+a { color:#126b5b; }
+.appendix { break-before:page; }
+.diagram-source { break-inside:avoid; }
+.diagram-source figcaption { color:#526575; font-weight:bold; margin-bottom:4pt; }
+.register { font-size:6.6pt; }
+.register th,.register td { padding:2.5pt 3pt; }
+footer { color:#526575; border-top:1px solid #cad5da; margin-top:14pt; padding-top:4pt; font-size:8pt; }
+.draft-banner { background:#fff3d5; border:1px solid #d99b19; padding:10pt; margin:12pt 0 16pt; font-weight:bold; }
+</style></head><body>
+<div class="draft-banner">WORKING DRAFT - synthetic demonstration only. Not a final academic submission. Review missing source evidence, personal reflection, and legal obligations before use.</div>
+<h1>Project Savanna: Enterprise Data Management Turnaround</h1>
+<p><strong>Status:</strong> AI-assisted consultancy draft and runnable demonstration <strong>Prepared for:</strong> Savanna Retail Group (SRG) <strong>Evidence boundary:</strong> Scenario facts come from the supplied brief. Per the user&#39;s instruction, all data files currently in the workspace were profiled. The fixture README explicitly calls them fabricated test values; metrics below are exact for those files, not verified SRG business results. The assignment&#39;s broken-job log and HR workbook are not present.</p>
+<blockquote>
+<p><strong>Authorship and integrity:</strong> This draft was prepared with AI assistance.</p>
+<p>Review it, add your own evidence and reasoning, disclose assistance under KIU</p>
+<p>policy, and do not claim personal experience or results that are not yours.</p>
+<p>This is not a legal opinion or a published dashboard.</p>
+</blockquote>
+<h2>Executive briefing</h2>
+<p>SRG&#39;s reported 23% cross-system customer duplication, five product identifiers, 11-day monthly reporting cycle, 8.4% book-to-physical stock variance, and delayed response to a stolen laptop are not isolated database defects. They are symptoms of missing decision rights, inconsistent capture, unowned reference data, fragmented integration, weak controls, and no trusted analytical layer. Hiring DBAs alone would improve availability and database administration, but would not decide which customer record is authoritative, change store signup behavior during outages, set retention periods, or establish who reports a suspected breach.</p>
+<p>Adopt a <strong>hub-and-spoke, offline-tolerant coexistence design</strong>: store systems continue operating during outages; a small, centrally managed integration and master-data hub reconciles signed, idempotent changes when links return. Start with governance, encrypted exports, reference-data controls, and a batch warehouse. Add near-real-time processing only to narrow use cases with a measured business value. A small central team coordinates stewardship through existing roles; it does not replace operational ownership.</p>
+<p>The first six months prioritize measurable controls and quick wins: stop unencrypted customer exports, establish an incident clock and access register, standardize product units and customer capture, automate a daily sales reconciliation, and publish a governed pilot dashboard. The proposed 18-month envelope totals UGX 480 million including contingency. Before committing funds, Finance must validate local quotations, recurring costs, taxes, connectivity, and the distinction between budgeted allocations and actual spend.</p>
+<h2>Scenario and evidence</h2>
+<p>SRG has 23 stores, SavannaShop, 180,000 loyalty members, mobile-money integrations, siloed POS MySQL databases, e-commerce PostgreSQL, a standalone loyalty database, SaaS CRM, HQ-only Odoo, local HR/payroll and spreadsheets, 14 supplier spreadsheets, and manual mobile-money CSVs. Store links and power are intermittent. The data budget is UGX 480M/year, the IT team has four people (two SQL-capable), and the Board expects visible gains by month 6 and a PDPO audit within 12 months.</p>
+<p>The Jinja incident in the brief involved a stolen laptop with an unencrypted export of 9,000 customers and an 11-day internal reporting delay. The workspace contains small CSV/JSON examples for customer, product, sales, suppliers, loyalty, HR schema, and footfall. It contains neither the named <code>SRG_HR.xlsx</code> nor <code>etl_error_log.txt</code>; the available <code>SRG_HR_SAMPLE.csv</code> is one synthetic row, and should not be mistaken for the workbook.</p>
+<h2>A1 — EDM diagnostic and customer-data lifecycle</h2>
+<p><strong>EDM is the enterprise discipline</strong> for treating data as a governed asset: decision rights, shared definitions, quality controls, security, privacy, metadata, integration, retention, and accountable use. <strong>Database management</strong> is the narrower engineering work of operating schemas, queries, backups, indexes, access, and availability. DBAs are needed, but cannot alone resolve the duplicated people across the POS, web, CRM, and loyalty systems or decide whether a loyalty profile may be matched on a phone number.</p>
+<table>
+<tr>
+<th>Lifecycle stage</th>
+<th>System / actor</th>
+<th>Required control</th>
+<th>Scenario failure to test</th>
+</tr>
+<tr>
+<td>Create / collect</td>
+<td>POS cashier, web checkout, loyalty app</td>
+<td>Notice, purpose, minimum fields, source and timestamp</td>
+<td>Local “quick” records and inconsistent formats</td>
+</tr>
+<tr>
+<td>Validate</td>
+<td>POS/app/web field rules; store steward</td>
+<td>Required/format/reference checks; offline queue</td>
+<td>Invalid district, phone, duplicate signup</td>
+</tr>
+<tr>
+<td>Store</td>
+<td>Store MySQL, PostgreSQL, loyalty cloud, CRM, Odoo</td>
+<td>Named owner, role-based access, encryption, backups</td>
+<td>Siloed copies and exports</td>
+</tr>
+<tr>
+<td>Integrate / master</td>
+<td>Integration hub and customer steward</td>
+<td>Provenance, idempotent event IDs, match review</td>
+<td>Wrong-member points and unsafe auto-merge</td>
+</tr>
+<tr>
+<td>Use / share</td>
+<td>Analysts, marketing, finance, partners</td>
+<td>Approved purpose, masked views, logged sharing</td>
+<td>Uncontrolled exports and undefined consent</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td>System owner and records steward</td>
+<td>Approved schedule, restricted archive, legal hold</td>
+<td>Indefinite copies in spreadsheets</td>
+</tr>
+<tr>
+<td>Delete / prove</td>
+<td>Source owners and privacy focal point</td>
+<td>Verified deletion across replicas/backups per schedule</td>
+<td>No owner or evidence of downstream deletion</td>
+</tr>
+</table>
+<p>The recurring defects show why a clean-up without changed controls re-creates the defect on the next transaction. DAMA-DMBOK functions absent or weak in this scenario include governance, data quality, MDM/reference data, metadata, architecture/integration, security/privacy, and lifecycle management. The mapping is in <code>docs/diagrams/dama-problem-map.mmd</code>.</p>
+<figure class="diagram-source"><figcaption>Editable Mermaid diagram source</figcaption><pre>flowchart LR
+  POS[POS signup] --&gt; CHECK[Notice and entry validation]
+  WEB[Web checkout] --&gt; CHECK
+  LOY[Loyalty registration] --&gt; CHECK
+  CHECK --&gt;|connected| SRC[Source systems]
+  CHECK --&gt;|offline| Q[Encrypted provisional queue]
+  Q --&gt;|reconnect and idempotent replay| HUB[Integration hub]
+  SRC --&gt; HUB --&gt; REVIEW[Steward match review] --&gt; GOLD[Golden ID with provenance]
+  GOLD --&gt; USE[Purpose-limited use]
+  USE --&gt; ARCH[Restricted archive by approved schedule]
+  ARCH --&gt; DEL[Verified deletion or legal hold]
+  USE --&gt; SHARE[Approved processor or partner sharing]</pre></figure>
+<p>Editable source: <a href="./diagrams/customer-lifecycle.mmd">customer-lifecycle.mmd</a>.</p>
+<h2>A2 — Governance framework and compliance register</h2>
+<h3>Charter</h3>
+<p><strong>Vision:</strong> timely, explainable, protected data that store and Board decisions can rely on. <strong>Principles:</strong> business ownership; collection for a stated purpose; minimum necessary data; quality at entry and monitored downstream; offline continuity with later reconciliation; traceable changes; least privilege; retention limits; human review for uncertain identity matches. <strong>Scope:</strong> customer, product, supplier, store, sales/payment, loyalty, HR, and footfall data across all 23 stores and digital channels, including processors and partner exchanges. <strong>Proportionality:</strong> use existing staff and a small monthly council; no new six-person bureaucracy.</p>
+<h3>Operating structure</h3>
+<ul>
+<li><strong>Executive sponsor / accountable controller:</strong> COO (board escalation and</li>
+</ul>
+<p>funding); CFO approves material spend and risk acceptance.</p>
+<ul>
+<li><strong>Data Governance Council (monthly):</strong> COO (chair), IT lead, Finance lead,</li>
+</ul>
+<p>Retail Operations representative, Marketing/CRM lead, HR lead, and privacy focal person. Approves definitions, policy exceptions, cross-domain disputes.</p>
+<ul>
+<li><strong>Domain owners:</strong> Retail Operations for store/sales; Marketing/CRM for</li>
+</ul>
+<p>customer and loyalty; Merchandising/Procurement for product and supplier; Finance for payment/reconciliation; HR lead for workforce records.</p>
+<ul>
+<li><strong>Stewards (part-time existing staff):</strong> nominated store champions and</li>
+</ul>
+<p>functional analysts maintain definitions, resolve routine quality queues, and record exceptions. IT lead is platform custodian, not owner of business meaning.</p>
+<ul>
+<li><strong>Privacy/security:</strong> named privacy focal person coordinates rights and</li>
+</ul>
+<p>incidents with the controller; IT lead operates access, encryption, logging, backups, and restoration. Obtain qualified counsel for statutory decisions.</p>
+<h3>RACI</h3>
+<p>R = responsible, A = accountable, C = consulted, I = informed. Roles: COO/council (GOV), IT lead (IT), business data owner (OWN), domain steward (STW), privacy focal person (PRIV), CFO (FIN).</p>
+<table>
+<tr>
+<th>Activity</th>
+<th>GOV</th>
+<th>IT</th>
+<th>OWN</th>
+<th>STW</th>
+<th>PRIV</th>
+<th>FIN</th>
+</tr>
+<tr>
+<td>Approve data definitions</td>
+<td>A</td>
+<td>C</td>
+<td>R</td>
+<td>R</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Create customer at channel</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>R</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Approve customer merge</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>R</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Change product reference</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>R</td>
+<td>I</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Grant production access</td>
+<td>I</td>
+<td>R</td>
+<td>A</td>
+<td>C</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Approve export / partner share</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>I</td>
+<td>R</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Resolve data-quality incident</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>R</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Approve retention schedule</td>
+<td>A</td>
+<td>C</td>
+<td>R</td>
+<td>C</td>
+<td>R</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Execute verified deletion</td>
+<td>I</td>
+<td>R</td>
+<td>A</td>
+<td>C</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Declare / assess breach</td>
+<td>I</td>
+<td>R</td>
+<td>A</td>
+<td>I</td>
+<td>R</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Approve risk exception</td>
+<td>A</td>
+<td>C</td>
+<td>R</td>
+<td>I</td>
+<td>C</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Reconcile daily sales</td>
+<td>I</td>
+<td>C</td>
+<td>A</td>
+<td>R</td>
+<td>I</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Review quarterly access</td>
+<td>I</td>
+<td>R</td>
+<td>A</td>
+<td>C</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Approve new data attribute</td>
+<td>A</td>
+<td>C</td>
+<td>R</td>
+<td>C</td>
+<td>C</td>
+<td>I</td>
+</tr>
+<tr>
+<td>Restore after outage</td>
+<td>I</td>
+<td>R</td>
+<td>A</td>
+<td>C</td>
+<td>I</td>
+<td>I</td>
+</tr>
+</table>
+<p>Exactly one A is shown per row. Council terms of reference should name a delegate for the privacy focal role and define escalation when a business owner is also the incident subject.</p>
+<h3>Enforceable minimum policies</h3>
+<ul>
+<li><strong>Access and classification.</strong> Owners classify each field Public, Internal,</li>
+</ul>
+<p>Confidential, or Restricted. Restricted includes identity, contact, payment tokens, loyalty history, HR/payroll, and precise footfall data. IT grants named, time-limited roles only after owner approval; MFA is mandatory for remote/admin access; quarterly recertification; all bulk exports encrypted and logged; no unencrypted endpoint copy. The IT lead blocks unapproved exports and reports exceptions to the council monthly.</p>
+<ul>
+<li><strong>Data quality.</strong> Owners approve a rule, threshold, steward, and remediation</li>
+</ul>
+<p>SLA for each critical field. Reject invalid mandatory data at entry when online; while offline, queue it with source/event ID and reconcile later. Do not silently substitute values. Daily sales/product exceptions go to stewards; suspected identity merges require review. Weekly exception reports and monthly threshold breaches go to the owner and council.</p>
+<ul>
+<li><strong>Retention and deletion.</strong> Owners propose purpose-specific periods; privacy</li>
+</ul>
+<p>focal person and counsel validate them against legal, tax, employment, and contract duties before approval. No invented universal retention period. Every export has an owner, purpose, expiry, and deletion receipt. Deletion requests are tracked across source and derived copies, subject to verified holds; backups expire under a documented rotation. Monthly overdue items are escalated to COO.</p>
+<h3>Compliance obligations and gaps</h3>
+<p>Treat Uganda&#39;s Data Protection and Privacy Act, 2019 and applicable regulations/PDPO requirements as the primary framework. Confirm controller and processor registration/status, lawful and fair collection, notice/consent or other applicable basis, purpose limitation, security safeguards, data-subject rights, processor agreements, cross-border safeguards, and incident reporting against the current Act and PDPO guidance before the audit. The Act is identified as Act 9 of 2019. The official PDPO site was located, but its published Act link returned an application shell rather than the statute text in this verification pass. For that reason, no Uganda section numbers or statutory notification deadline are asserted here; the controlling provisions, regulations, and current guidance must be checked by counsel before the audit. See <code>docs/legal-citation-review.md</code> for verification scope and sources.</p>
+<p>For the EU-facing partnership, map the <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">official GDPR text</a>, Articles 5–6 (principles/lawfulness), 12–22 (transparency and rights), 25 (privacy by design), 28 (processors), 30 (records), 32 (security), 33–34 (breach notification), 35 (DPIA), and 44–49 (international transfers) to actual processing roles and contracts. Article 3 defines territorial scope, including processing in the context of an EU establishment and certain processing by a non-EU controller or processor offering goods/services to people in the EU or monitoring their behaviour there. Do not assume GDPR applies to every Ugandan processing activity; document the establishment, targeting, and monitoring facts with counsel. Under Article 33, where a personal-data breach is not unlikely to result in a risk to individuals, the controller must notify the competent supervisory authority without undue delay and, where feasible, within 72 hours after becoming aware; if later, reasons for delay are required. Article 34 is a separate communication duty where the breach is likely to result in a high risk, subject to its stated exceptions. CCPA/CPRA is a comparative reference only unless California applicability is established; assess notice, access/deletion/correction, opt-out, sensitive data, service-provider, and non-discrimination obligations if triggered.</p>
+<table>
+<tr>
+<th>Priority</th>
+<th>Current gap / evidence</th>
+<th>Action</th>
+<th>Owner / due</th>
+</tr>
+<tr>
+<td>Critical</td>
+<td>Unencrypted 9,000-record laptop export; late escalation</td>
+<td>Reconstruct incident; preserve evidence; legal assessment; prohibit local exports; disk encryption</td>
+<td>COO, IT, privacy focal / 30 days</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Siloed customer collection and uncertain notices/bases</td>
+<td>Channel inventory, notice/consent evidence, purpose register and processor contracts</td>
+<td>Marketing, privacy / 90 days</td>
+</tr>
+<tr>
+<td>High</td>
+<td>No stated retention/deletion control across spreadsheets</td>
+<td>Approved schedule and export registry; deletion proof and holds</td>
+<td>Owners, privacy / 120 days</td>
+</tr>
+<tr>
+<td>High</td>
+<td>No cross-border transfer assessment for EU/Kenya/Rwanda</td>
+<td>Data-flow map, transfer mechanism/legal review, vendor due diligence</td>
+<td>COO, counsel / before transfer</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Quality and rights requests have no named queue/SLA</td>
+<td>Assign stewards, request and exception registers</td>
+<td>Owners / 90 days</td>
+</tr>
+</table>
+<p><strong>CFO memo.</strong> Governance is not a new committee tax; it is the set of decisions needed to make existing IT spend effective. The brief already describes one avoidable control failure: an unencrypted device carried 9,000 purchase-linked records and the incident surfaced 11 days late. Likely direct exposure includes investigation, notification, legal advice, device replacement, staff time, customer support, partner assurance, and lost trust; quantify only after Finance estimates SRG&#39;s actual unit costs and counsel evaluates applicable liability. Public comparators show downside can be material: the 2017 Equifax settlement included up to USD 425M consumer assistance plus USD 175M to states (FTC/CFPB/States, 2019); Target agreed to a USD 18.5M multistate settlement after its 2013 breach (state AG announcement, 2017). Verify against the <a href="https://www.ftc.gov/news-events/news/press-releases/2019/07/equifax-pay-575-million-part-settlement-ftc-cfpb-states-related-2017-data-breach">FTC Equifax settlement release</a> and the <a href="https://ag.ny.gov/press-release/2017/attorney-general-schneiderman-announces-185-million-settlement-target-data-breach">NY Attorney General Target settlement release</a>. These are not forecasts for SRG and must be checked against primary sources before publication. The single day-one policy that most directly prevents a repeat is the export/access policy: no unencrypted endpoint exports, role-based approval, expiry, and auditable deletion. Staff will violate it if it blocks work during outages; provide offline-first approved queues and enforce through technical controls, not posters.</p>
+<h2>B1 — Architecture, ER model, normalization</h2>
+<h3>Pattern decision</h3>
+<p>Score 1 (poor) to 5 (strong); weighted score = weight &#215; score, divided by 100. Weights prioritize outage tolerance, affordability, and maintainability over central uniformity because 23 stores lose connectivity and the four-person IT team has limited engineering capacity.</p>
+<table>
+<tr>
+<th>Criterion</th>
+<th>Weight</th>
+<th>Centralized</th>
+<th>Decentralized</th>
+<th>Federated</th>
+<th>Hub-and-spoke</th>
+</tr>
+<tr>
+<td>Offline resilience</td>
+<td>25</td>
+<td>1</td>
+<td>5</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>18-month affordability</td>
+<td>20</td>
+<td>2</td>
+<td>4</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Operability with current skills</td>
+<td>20</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Cross-channel consistency</td>
+<td>20</td>
+<td>5</td>
+<td>1</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Security / auditability</td>
+<td>15</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td><strong>Weighted total / 5</strong></td>
+<td><strong>100</strong></td>
+<td><strong>2.85</strong></td>
+<td><strong>2.95</strong></td>
+<td><strong>3.40</strong></td>
+<td><strong>4.25</strong></td>
+</tr>
+</table>
+<p>These are decision hypotheses, not measured vendor benchmarks. Validate cost, bandwidth, and recovery assumptions in a 2-store pilot. Reject fully centralized POS writes because outages would stop sales; reject unmanaged decentralization because it perpetuates competing identities and product codes. The selected design keeps transactional autonomy at the edge and sends versioned changes to a governed hub.</p>
+<h3>Core entities and assumptions</h3>
+<p>The Mermaid ER model is <code>docs/diagrams/operational-er.mmd</code>. Orders belong to one store/channel and contain one or more order lines; a customer may be anonymous, and guest orders must not be force-matched. Payments are separate from orders because split tender/refunds are possible. Loyalty membership is zero/one active account per customer subject to product confirmation. Suppliers and products are many-to-many via a supplier-product cross-reference omitted from the minimum assignment entity list but required in implementation.</p>
+<figure class="diagram-source"><figcaption>Editable Mermaid diagram source</figcaption><pre>erDiagram
+  CUSTOMER ||--o{ SALES_ORDER : places
+  STORE ||--o{ SALES_ORDER : fulfills
+  SALES_ORDER ||--|{ ORDER_LINE : contains
+  PRODUCT ||--o{ ORDER_LINE : sold_as
+  SALES_ORDER ||--o{ PAYMENT : settled_by
+  CUSTOMER ||--o| LOYALTY_ACCOUNT : may_have
+  SUPPLIER ||--o{ SUPPLIER_PRODUCT : offers
+  PRODUCT ||--o{ SUPPLIER_PRODUCT : sourced_as</pre></figure>
+<p>Assumptions that may break: (1) a “customer” phone is unique—shared family phones, recycled SIMs, or no-phone shoppers disprove this; (2) a product has one unit/category—variable-weight goods and packaging changes disprove this; (3) a store is a stable reporting unit—relocation, franchise ownership, or channel fulfillment can change its business meaning. Preserve source IDs and effective dates rather than baking these assumptions into a destructive merge.</p>
+<h3>Normalization and reporting trade-off</h3>
+<p>For an illustrative unnormalized line item <code>(receipt, date, customer, store, product1, qty1, product2, qty2, payment1, payment2)</code>, repeating product/payment groups violate 1NF. Convert to one row per order line with atomic attributes and a line number; separate order header, product, customer, store, and payment entities. Then remove partial dependencies (line attributes depend on <code>(order_id,line_no)</code>, not only order_id) for 2NF and transitive dependencies such as district name depending on store_id for 3NF. The available workspace files include small fabricated examples; no assignment-scale unnormalized extract is present. This is a worked pattern, not a claim that it exactly matches the available fixture columns.</p>
+<p>One deliberate denormalization is a daily store-product sales aggregate in the warehouse. It reduces dashboard scan cost and supports stock planning; it is rebuildable from immutable transaction lines, carries a refresh timestamp, and is never the operational stock ledger. Reconcile totals to the source before publishing.</p>
+<h2>B2 — Data quality and cleansing</h2>
+<p>The runnable demo profiles completeness, validity, consistency, uniqueness, accuracy proxy, and timeliness proxy before and after standardizing customer phone/district/name and product SKU/unit/category. Accuracy and timeliness cannot be established from syntax alone: they require a trusted external reference or source timestamp and business context. The script therefore labels these as proxy measures. It preserves suspicious records for review, does not guess invalid districts, and emits a candidate list rather than silently deleting duplicate people.</p>
+<p>The workspace contains eight customer rows and six product rows. The fixture README describes these records as fabricated. The figures below are reproducible calculations on those available files, not scenario-scale estimates.</p>
+<table>
+<tr>
+<th>Demo measure</th>
+<th>Before</th>
+<th>After</th>
+<th>Interpretation</th>
+</tr>
+<tr>
+<td>Customer rows complete for name, phone, district</td>
+<td>7/8 (87.5%)</td>
+<td>7/8 (87.5%)</td>
+<td>Missing phone remains missing; no value is invented</td>
+</tr>
+<tr>
+<td>Phone syntax accepted</td>
+<td>6/8 (75%)</td>
+<td>6/8 (75%)</td>
+<td>Formatting is standardized, but malformed/absent values still need review</td>
+</tr>
+<tr>
+<td>District mapped to demo reference</td>
+<td>7/8 (87.5%)</td>
+<td>7/8 (87.5%)</td>
+<td>Unknown district is retained for steward review</td>
+</tr>
+<tr>
+<td>Creation date parsed unambiguously</td>
+<td>7/8 (87.5%)</td>
+<td>7/8 (87.5%)</td>
+<td>Ambiguous date is not guessed</td>
+</tr>
+<tr>
+<td>Distinct phone format categories</td>
+<td>3</td>
+<td>2</td>
+<td>Valid forms normalize to E.164; unresolved values remain flagged</td>
+</tr>
+<tr>
+<td>Distinct date format categories</td>
+<td>4</td>
+<td>2</td>
+<td>Parsed values are ISO; ambiguous/invalid dates remain visible</td>
+</tr>
+<tr>
+<td>Customer duplicate candidates</td>
+<td>1/8 (12.5%)</td>
+<td>1/8 (12.5%)</td>
+<td>Candidate remains reversible and awaits human decision</td>
+</tr>
+<tr>
+<td>Product unit spellings</td>
+<td>6</td>
+<td>3</td>
+<td>Common aliases normalize to canonical units</td>
+</tr>
+<tr>
+<td>Product category values accepted</td>
+<td>5/6 (83.33%)</td>
+<td>6/6 (100%)</td>
+<td>Demo typo maps to a category; owner approval is required in production</td>
+</tr>
+<tr>
+<td>Product duplicate SKU candidates</td>
+<td>1/6 (16.67%)</td>
+<td>1/6 (16.67%)</td>
+<td>Case-normalized duplicate is flagged, not deleted</td>
+</tr>
+</table>
+<p>Accuracy and timeliness are explicitly unmeasured because no trusted reference, arrival timestamps, or agreed freshness SLA are available in the fixtures. The machine-readable before/after rows, numerator/denominator, and limitations are in <code>output/quality_metrics.csv</code>.</p>
+<p>The current sales fixture has 8/8 rows complete across the ten required non-conditional fields; 7/8 (87.5%) pass implemented validity checks. One ambiguous slash-date row is quarantined. All 8 currency strings pass the three-letter syntax check (not ISO-reference validation); 1/8 payment references are absent. No duplicate order/line keys are observed. The sole negative-quantity row has a return reason (1/1). Accepted lines total UGX 50,400 net and 9 net units after the return.</p>
+<p>The supplier file has 2/2 complete rows, both SKU crosswalks resolve to the product fixture, and both unit strings are recognized; Procurement has not verified the mappings. Loyalty has 3/3 complete rows, 3/3 customer IDs resolve within the customer fixture, all 3 balances parse as non-negative integers, and there are no repeated account IDs. Point balances cannot be reconciled without transaction events.</p>
+<p>The one-row HR schema sample contains candidate restricted fields <code>bank_account</code>, <code>health_note</code>, <code>phone</code>, and <code>pay_band</code>. Its values are placeholders, not real employee data. The assignment workbook is absent. Footfall has 3/3 events with required keys and parseable timezone-aware timestamps, no repeated event IDs, and no enumerated direct identifier fields. Three events are insufficient to establish privacy or stream-latency guarantees. Cross-source row-level rules and the hashes of every available input are in <code>output/workspace_dataset_inventory.csv</code> and <code>output/workspace_quality_profile.csv</code>; the narrative is in <code>output/workspace-data-profile.md</code>.</p>
+<p><strong>Point-of-entry validation catalog (12 minimum):</strong> required source-system record ID; transaction idempotency key; district from stewarded list; phone stored with country/extension semantics; date parse with ISO output; email syntax plus verification status; product SKU cross-reference; quantity numeric and returns reason required when negative; currency ISO code; payment reference nullable only with documented tender exception; unit of measure from controlled list; customer consent/purpose event when applicable; event time and source system on every change; foreign keys valid or explicitly pending-sync offline queue. Online writes reject invalid mandatory values; offline stores queue the event with the same checks on sync.</p>
+<p><strong>Continuous monitoring:</strong> daily feed by source and store; duplicate candidates &lt;1% new customer registrations routed for review; invalid district &lt;0.5%; unmapped SKU &lt;0.5%; rejected transaction &lt;0.1%; unexplained stock variance</p>
+<blockquote>
+<p>2% or a 3-sigma jump triggers same-day inventory investigation. These are</p>
+</blockquote>
+<p>initial service thresholds to approve during baseline, not measured facts. Steward triages by next business day; owner resolves systemic cause within five working days; IT pages the incident lead for missing/late critical feeds.</p>
+<p><strong>8.4% stock variance fishbone:</strong> the brief&#39;s 8.4% is a scenario-reported baseline, not independently calculated. The causal hypotheses (unit conversion, late/duplicate offline sync, returns/voids, shrinkage, supplier pack-size changes, delayed receiving, cycle-count practice, and reconciliation timing) must be tested with matched SKU/store/time data. See <code>docs/diagrams/stock-variance-fishbone.mmd</code>. Do not treat a recount or mass adjustment as root-cause correction.</p>
+<h2>B3 — Customer master data management</h2>
+<p>Choose <strong>coexistence</strong>: retain source applications and local customer IDs while assigning a hub <code>golden_customer_id</code>, source crosswalk, provenance, confidence, and survivorship. A registry alone cannot resolve/update the loyalty process; centralized replacement is over budget and outage-prone; consolidation-only analytics does not operationally return a resolved identity. Start in consolidation mode for a two-store pilot, then enable approved cross-reference updates after false-merge tests.</p>
+<p>Golden-record survivorship is attribute-specific: verified loyalty profile wins for explicit preferences/consent; CRM may win preferred contact only when recently verified and purpose permits; POS/web source values remain immutable observations and never overwrite verified attributes solely because they are newer. Name/address require source, timestamp, and confidence; address is effective-dated. No source silently overwrites consent. Keep every candidate value and the survivorship decision for audit.</p>
+<p>Candidate matching scores: exact source-system ID crosswalk 100; verified phone 35; normalized name 25; email 25; district 10; date-of-birth match only if lawfully collected and approved 15; cap at 100 and penalize conflicting verified attributes. Auto-link only exact crosswalk or score ≥95 with at least two independent matching attributes and no hard conflict. 75–94 goes to a trained steward; below 75 stays separate. The percentages/weights are pilot starting points, not statistically calibrated probabilities. Measure false merge and missed-match rates against reviewed pairs before expansion. A wrong merge can expose purchases/preferences and transfer another person&#39;s loyalty benefit; provide reversible links, audit trail, unmerge workflow, and rights review.</p>
+<p>During outages, permit a locally generated provisional ID with source prefix, device ID, UUID, and creation timestamp. Queue idempotent events; do not assign another customer&#39;s points until matching is confirmed. Politically, the store manager owns customer service and participates in pilot acceptance; centrally owned ID rules do not mean a cashier must wait on a live network.</p>
+<h2>B4 — Integration, warehouse, broken ETL, streaming</h2>
+<p>The warehouse star schema is <code>FactSales</code> at order-line/payment allocation grain with <code>DimDate</code>, <code>DimProduct</code> (Type 2), <code>DimStore</code> (Type 2), <code>DimCustomer</code> (privacy-limited), <code>DimChannel</code>, <code>DimTender</code>, and degenerate source transaction ID. Separate <code>FactInventorySnapshot</code>, <code>FactLoyaltyActivity</code>, and <code>FactFootfallAggregate</code> avoid mixing incompatible grains. Loyalty/contact details remain outside general analytics.</p>
+<p>Batch extraction uses read-only incremental queries/change timestamps where available; otherwise encrypted scheduled exports or store edge queues with sequence/checksum. SaaS APIs use vendor-supported pagination and quotas. HR spreadsheets are manually approved, minimized, encrypted, and loaded only for a defined workforce metric. Supplier workbooks land in quarantine with file hash, sender, schema check, and steward approval. Mobile money files reconcile on daily batch, not millisecond streaming. Transform to ISO dates, decimal quantities, ISO currency codes, canonical units, source-preserving keys, and effective-dated dimensions. Load dimensions, crosswalks, facts, then aggregates in one logged transaction or restartable batch. Reject/quarantine invalid rows; never drop them without a count and reason.</p>
+<p><code>sql/etl-core.sql</code> shows restartable staging-to-warehouse transformation patterns. <code>docs/diagrams/etl-workflow.mmd</code> and <code>integration-flows.mmd</code> are editable visuals. For a future cloud move, ETL is preferred initially: fewer skills and explicit controls before loading. ELT becomes attractive when a managed warehouse is funded, raw-zone access is restricted, transformations are tested/versioned, and costs are monitored. A scorecard is in the decisions register.</p>
+<p><strong>Local ETL test evidence:</strong> <code>scripts/test-postgres.ps1</code> loads seven accepted synthetic order lines into <code>staging.sales_line</code>, runs the ETL twice, and checks that exactly seven fact rows remain, the ambiguous-date input is not promoted, and the negative return is preserved. The script passes in <code>savanna_edm_demo</code>; <code>output/postgres-demo-verification.txt</code> contains final assertions, <code>output/postgres-demo-etl-log.txt</code> contains the execution transcript, and <code>output/postgres-access-test.txt</code> records the allowed masked view and denied restricted-table access. The schema/RBAC were applied to that local database. These prove only the demo SQL path, not integration with SRG systems or validity of the scenario&#39;s 60,000 transactions. See <a href="./finalization-checklist.md">finalization-checklist.md</a> for all outstanding evidence and student-specific submission steps.</p>
+<figure class="diagram-source"><figcaption>Editable Mermaid diagram source</figcaption><pre>flowchart LR
+  SRC[POS, web, loyalty, Odoo, suppliers, payments] --&gt; LAND[Encrypted landing and manifest]
+  LAND --&gt; VALIDATE[Schema, type, key and totals checks]
+  VALIDATE --&gt;|invalid| QUARANTINE[Quarantine with reason]
+  VALIDATE --&gt;|valid| STAGE[Source-preserving staging]
+  STAGE --&gt; DIM[Conformed dimensions and Type 2 history]
+  DIM --&gt; FACT[Idempotent facts]
+  FACT --&gt; RECON[Reconcile counts and control totals]
+  RECON --&gt; BI[Masked, role-filtered dashboard]</pre></figure>
+<p>Editable source: <a href="./diagrams/etl-workflow.mmd">etl-workflow.mmd</a>.</p>
+<p><strong>Broken job diagnosis:</strong> the requested <code>etl_error_log.txt</code> does not exist in the complete workspace inventory, so a specific failure/root cause is not evidenced and cannot be inferred. The executed local SQL job is not broken: seven rows staged, seven rows loaded, and the second run retained seven facts using the composite source key. P002 is rejected because <code>04/01/2026</code> could mean 4 January or 1 April; the negative return is retained. The RBAC test&#39;s <code>permission denied</code> is expected and proves restricted access. It is not an ETL failure. The diagnostic sequence for a later-supplied log remains in <code>docs/etl-log-diagnosis-template.md</code>; the run-level evidence is <code>output/postgres-demo-etl-log.txt</code>.</p>
+<p><strong>Real-time, narrowly:</strong> footfall events can update an aggregated occupancy / queue indicator for store managers if sensors are approved, coarse, and non-identifying. No camera or person-level identity join. Stock visibility needs near-real-time only for selected high-demand SKUs; POS events queue at the edge and publish after reconnect, with freshness shown. Mobile-money fraud patterns should begin with daily reconciliation and fast exception alerts for duplicate references/amounts; payment-provider feeds, fraud base rates, latency needs, privacy, and false-positive handling must justify any stream processor. Do not stream all sales merely because the Board says “real time.” The stream path is sensor → local buffer → authenticated broker → schema validation and coarse aggregation → alert/dashboard; dead-letter queue and retention controls are mandatory.</p>
+<h2>C1 — Metadata, lineage, and catalog</h2>
+<p><code>docs/data-dictionary.csv</code> contains 38 warehouse fields with business, technical, and administrative metadata, owner, sensitivity, and quality tags. Use tags <code>domain:<em></code>, <code>sensitivity:</em></code>, and <code>quality:*</code>; e.g. <code>domain:customer</code>, <code>sensitivity:restricted</code>, <code>quality:verified</code>. Steward reviews definitions quarterly and on schema change; IT records technical lineage at deployment; the owner approves semantic changes. Address-schema impact analysis traces staging → <code>DimCustomer</code> → active-customer KPI → churn/segment dashboard and export/API consumers. A migration adds structured locality / district / address lines while maintaining a versioned compatibility view, backfill and reconciliation, then deprecates old free text after consumer sign-off.</p>
+<figure class="diagram-source"><figcaption>Editable Mermaid diagram source</figcaption><pre>flowchart LR
+  RAW[loyalty.customer_id and activity_at] --&gt; LAND[Source and batch manifest]
+  LAND --&gt; CLEAN[Validate and normalize activity]
+  CLEAN --&gt; XW[Reviewed golden-ID crosswalk]
+  XW --&gt; FACT[FactLoyaltyActivity]
+  FACT --&gt; KPI[Distinct eligible active customers by month]
+  KPI --&gt; DASH[Board dashboard with refresh timestamp]</pre></figure>
+<p>Editable source: <a href="./diagrams/metadata-lineage.mmd">metadata-lineage.mmd</a>.</p>
+<p>For this team, begin with versioned CSV/SQL metadata and PostgreSQL comments; evaluate OpenMetadata against Microsoft Purview in a time-boxed pilot. Apache Atlas is also a credible open-source alternative but can require more platform operations than four staff can sustain. Choose a paid service only if its annual total cost, residency, access integration, support, and contract terms beat a lightweight catalog. No vendor price is asserted; procurement must collect quotes.</p>
+<h2>C2 — Security, privacy, incident response</h2>
+<p>The threat model includes stolen/unlocked devices, insider export, phishing and credential theft, ransomware, vendor compromise, store power/connectivity loss, shared accounts, spreadsheet leakage, insecure backups, and mistaken cross-customer matches. The prioritized 12-item register is <code>docs/risk-register.csv</code>; likelihood and impact are 1–5, initial score is their product, and residual ratings require owner sign-off.</p>
+<p><code>sql/rbac.sql</code> creates least-privilege roles and a negative-access test for restricted customer data. <code>scripts/profile-and-clean.ps1</code> writes a separate masked customer file; masking is pseudonymization, not anonymization. In production require TLS, volume/database encryption, centrally managed keys, rotation and recovery testing, MFA, endpoint disk encryption, secrets management, backups, audit logging, and quarterly access recertification. Analytics roles use masked aggregates. Do not place real customer data in this repo.</p>
+<p>The EU-loyalty DPIA working template is <code>docs/dpia-loyalty-eu.md</code>. Its release gates include necessity/proportionality, lawful basis and clear notices, consent withdrawal where consent is the basis, minimization, retention, matching error impact, child/household treatment, processor contracts, international transfers, rights handling, security tests, and a DPO/supervisory consultation decision with counsel.</p>
+<p><strong>Rewrite of the Jinja response:</strong> staff notify the named incident lead immediately through a 24/7 contact tree; IT isolates the device/account, revokes sessions/keys, preserves evidence, records discovery time and scope, and does not wipe evidence before coordination. Privacy focal person and controller assess data, persons, encryption, likely harm, processors, and jurisdiction with counsel; notify the GDPR supervisory authority within the applicable Article 33 window if GDPR applies and its risk threshold is met. Assess Article 34&#39;s separate high-risk communication duty and exceptions. For Uganda, establish the applicable notice duty and timeline against verified Act/regulation text and current PDPO guidance rather than importing the GDPR&#39;s 72-hour period. Keep decision rationale, notices, remediation, and lessons in a register; test the process quarterly. The 11-day internal delay is a control failure regardless of whether statutory notification ultimately was required.</p>
+<p>Audit checklist: registration/status confirmed; processing inventory and lawful purposes recorded; notices/version evidence present; processor terms signed; rights queue tested; transfer assessments approved; retention and deletion evidence available; encryption/access recertified; incident tabletop completed; DPIA approved; data-quality owners assigned. Mark each item Pass/Fail/Not evidenced only after reviewing records.</p>
+<h2>C3 — Analytics and emerging technology</h2>
+<p>Board questions: (1) which customer cohorts are retained or churning, using consented loyalty activity and a disclosed inactivity window; (2) which products/store pairs have repeated stock-outs or excess days-on-hand; (3) which segments grow by channel and margin, not just gross sales; (4) where do reconciliation exceptions cluster by provider/reference; (5) which expansion stores meet demand, connectivity, fulfillment, and profitability thresholds?</p>
+<p>Workflow: source → quarantine → validation → conformed dimensions and facts → reconciliation → role-filtered semantic dataset → dashboard → decision log/action owner. Dashboard design uses explicit dates, currency, grain, filter/drill controls, and missing-data state. <code>dashboard/index.html</code> is an offline demonstration generated from the seven accepted sales fixture rows; it filters by month/district/channel/category and has three drill-down charts. The records are explicitly marked synthetic and are too few for meaningful business trend conclusions. <code>dashboard/dashboard-demo.png</code> is a screenshot; <code>dashboard/demo-data.js</code> is reproducibly generated from cleaned rows. For Tufte/Few review, reject 3-D pies, unlabeled dual axes, and a raw record-level table; use small multiples, denominator-visible rate charts, and exception details behind an access check.</p>
+<p><strong>Tableau Public publication status:</strong> not yet published. Tableau Public 2023.2 is installed, the Tableau Public website sign-in is complete, and the safe aggregate CSV was imported and a local worksheet is open, showing seven marks and total net sales of UGX 50,400. Native HTTPS requests to Tableau Public&#39;s <code>/app</code> routes now return HTTP 200, but the desktop <strong>Save to Tableau Public</strong> embedded sign-in still fails with <code>ERR_CONNECTION_RESET</code>; no public workbook or view is published and there is no live public URL. A safe import file, <code>dashboard/workspace-synthetic-sales-aggregates.csv</code>, is generated from the accepted cleansed rows and contains grouped measures only, not customer or transaction identifiers. Follow <code>docs/dashboard-publication.md</code> to import and retry desktop authentication (or use an updated Tableau Public client) and publish the view. Tableau Public makes published work and data public, so only this synthetic aggregate should be used. Add the genuine public URL here only after testing it signed out. The local HTML demo is not a live Tableau link.</p>
+<p><strong>Technology choices:</strong> pilot managed cloud object storage + PostgreSQL warehouse + managed scheduler only after cost, region, connectivity, backup, and processor review. Do not adopt a full lakehouse or data mesh now: skills, team size, governance maturity, and budget do not justify it. Pilot automated rule-based anomaly detection first; defer AI identity matching until reviewed ground truth, bias tests across names/languages/districts, human override, and appeal path exist. A 2-year maturity goal is repeatable governed reporting, defined quality SLAs, lineage for critical KPIs, and an audited self-service semantic layer—not autonomous decisions.</p>
+<p>For an explicit maturity assessment, use a five-level capability rubric: Level 1 ad hoc, Level 2 repeatable, Level 3 defined, Level 4 measured/managed, Level 5 optimized. On the scenario evidence, SRG is between Levels 1 and 2: some operational systems and reports exist, but consolidation is manual, definitions and owners are unclear, and quality/security controls are not consistently measured. This is a provisional assessment rather than an audit result. Target Level 3 for governed monthly reporting, named owners, repeatable quality checks, lineage for critical KPIs, and tested access/incident processes within two years. Do not target Level 4–5 until source feeds and stewardship are reliable.</p>
+<h2>D1 — 18-month roadmap and budget</h2>
+<table>
+<tr>
+<th>Phase</th>
+<th>Milestones and governance gate</th>
+<th>UGX M</th>
+</tr>
+<tr>
+<td>M0–3: contain and baseline</td>
+<td>Export ban/encryption, incident tabletop, inventory and owners, baseline DQ, procure pilot</td>
+<td>90</td>
+</tr>
+<tr>
+<td>M4–6: visible wins</td>
+<td>Two-store offline queue pilot, product reference cleanup, daily sales reconciliation, first governed dashboard; council accepts measures</td>
+<td>115</td>
+</tr>
+<tr>
+<td>M7–12: integrate and assure</td>
+<td>Customer coexistence pilot, Type-2 warehouse dimensions, rights/retention tests, PDPO audit evidence, DPIA and vendor review</td>
+<td>165</td>
+</tr>
+<tr>
+<td>M13–18: scale selectively</td>
+<td>Rollout based on pilot exit criteria, refresh SLAs, recovery test, KPI benefit review, next-year decision</td>
+<td>59</td>
+</tr>
+<tr>
+<td>Controlled contingency</td>
+<td>COO + CFO approval, documented change and risk; not a hidden spend target</td>
+<td>51</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td>Within the stated annual envelope; verify cash-flow and recurring run-rate</td>
+<td><strong>480</strong></td>
+</tr>
+</table>
+<table>
+<tr>
+<th>Allocation</th>
+<th>UGX M</th>
+<th>Arithmetic / scope</th>
+</tr>
+<tr>
+<td>Staff backfill, training, steward time</td>
+<td>72</td>
+<td>Existing staff time and practical training</td>
+</tr>
+<tr>
+<td>Store connectivity, edge buffering, UPS</td>
+<td>50</td>
+<td>Pilot first; quote 23-store rollout</td>
+</tr>
+<tr>
+<td>Endpoint/database security, backup and key controls</td>
+<td>65</td>
+<td>Encryption, MFA, logs, tested restore</td>
+</tr>
+<tr>
+<td>Software, support, catalog/BI</td>
+<td>45</td>
+<td>Annual license/support cap; procurement quotes required</td>
+</tr>
+<tr>
+<td>Integration and warehouse implementation</td>
+<td>90</td>
+<td>Pilot setup, testing, monitored jobs</td>
+</tr>
+<tr>
+<td>Privacy/legal/audit readiness</td>
+<td>40</td>
+<td>Counsel, DPIA, processor/transfer reviews</td>
+</tr>
+<tr>
+<td>Data quality and MDM rollout</td>
+<td>45</td>
+<td>Steward workflow, crosswalk, reference controls</td>
+</tr>
+<tr>
+<td>Dashboard and adoption</td>
+<td>22</td>
+<td>Role-filtered semantic layer, user training</td>
+</tr>
+<tr>
+<td>Contingency</td>
+<td>51</td>
+<td>10.625% of total; controlled release</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>480</strong></td>
+<td><strong>72+50+65+45+90+40+45+22+51</strong></td>
+</tr>
+</table>
+<p>Gate each phase on owner sign-off, security testing, source reconciliation, staff readiness, and spend-to-date. Quick-win success at M6: encrypted exports and incident SLA tested; daily report delivered by next business day; SKU exceptions assigned; two-store queue completes replay without duplicate orders; dashboard refresh timestamp and reconciliation pass are visible.</p>
+<p><strong>Coherence:</strong> governance assigns definitions/owners → entry rules and stewards reduce recurring defects → reviewed customer/product crosswalks enable integration → metadata and lineage preserve meaning → privacy/security constrain use and sharing → reconciled, role-filtered analytics supports inventory, customer, and payment decisions.</p>
+<h2>D2 — decisions, critique, reflection, viva</h2>
+<p>Eight decisions and the evidence that could reverse them are in <code>docs/decision-log.csv</code>. The strategy is vulnerable: the four-person IT team may not sustain integrations; store staff can route around controls if the network fails; managers may reject centrally governed IDs; “coexistence” can become one more sync service; licensing and cross-border transfer costs may exceed assumptions; and a council may be captured by senior owners who suppress quality issues. Countermeasures are deliberately modest: two-store pilot, offline queue, service-level ownership, reconciliation and rollback, open exports, per-phase procurement gates, and escalation to COO. If training and connectivity cannot be funded, slow rollout rather than silently weakening privacy controls. A 50% budget cut means retain incident controls, backup, access, minimum quality ownership, and daily finance reconciliation; defer real-time streaming, broad cloud migration, catalog purchase, and nonessential analytics.</p>
+<p><strong>Reflective essay:</strong> use the separately marked working draft in <code>docs/reflective-essay-draft.md</code>. Its career-path section is intentionally unfilled because the student&#39;s intended career and experience were not provided. Replace that section truthfully and review the entire essay before use. Do not claim a certification or field experience not held. Viva preparation should include: why coexistence beats centralization; what happens to an offline signup; which match causes a manual review; how the stock variance is actually diagnosed; what evidence changes the 8.4% baseline; how a failed partial ETL is replayed; what the 50%-budget plan defers; and which legal conclusions require counsel.</p>
+<h2>Reproducibility and submission evidence</h2>
+<p>Run the demo and keep generated outputs separate from source fixtures. For a real assessment, capture: original-file hashes and received dates; pipeline version/command; row counts before/after; before/after metrics; quarantined records and reason codes; unauthorized SQL test output; dashboard refresh timestamp; reconciliation results; and reviewer sign-offs. Create a PDF from the reviewed report only after replacing every pending item with supported evidence and checking the 40-page limit. No missing input is represented as a successful result.</p>
+<section class="appendix"><h1>Board briefing memo</h1>
+<p><strong>To:</strong> Board of Directors, Savanna Retail Group <strong>From:</strong> Enterprise Data Management Consultant (working draft) <strong>Subject:</strong> Control the data causes, not only the database symptoms <strong>Decision requested:</strong> Approve a six-month, two-store pilot and release funding by phase, within the stated UGX 480M envelope.</p>
+<h2>Why action is needed</h2>
+<p>SRG&#39;s reported symptoms are linked: 23% duplicate customer records, wrong loyalty awards, five product identifiers for the same item, 11 days to prepare monthly reports, an 8.4% stock variance, and an unencrypted laptop with 9,000 customer records that was reported internally 11 days late. Each number comes from the supplied scenario brief and has not been independently recalculated. The instructor datasets and incident evidence were not provided with the PDF.</p>
+<p>Hiring two database administrators would help maintain availability, backups, indexes, and access controls. It would not decide who owns a customer identity, which supplier SKU maps to a product, whether an offline signup may be merged, which report definition the Board should trust, how long an export may be kept, or who assesses and reports a suspected breach. Those are enterprise data management decisions involving operational owners, IT, privacy, Finance, and the Board.</p>
+<h2>Recommended operating model</h2>
+<p>Select a hub-and-spoke architecture with local operation during outages and a governed integration/MDM hub for replay, reconciliation, and cross-system identifiers. Keep existing transactional systems during the pilot. A store that loses its connection must still sell; an offline customer gets a provisional local ID, not another customer&#39;s points. Identity matches require strong evidence or human review and must be reversible.</p>
+<p>Begin with controls that reduce immediate exposure: prohibit unencrypted exports, require encrypted endpoints and approved access, record an export owner/purpose/expiry, rehearse incident escalation, and test recovery. In parallel, assign data owners and stewards, approve a product/unit reference, and automate daily sales reconciliation. Build a relational warehouse and role-filtered dashboard from reconciled batch data. Consider near-real-time processing only for a measured use case such as a selected stock-out alert or aggregate store queue count.</p>
+<h2>Six-month outcomes</h2>
+<p>By month 3, have a named incident lead, an export register, an access review, owners for customer/product/sales data, and a measured data-quality baseline. By month 6, complete a two-store offline/replay pilot with no duplicate sales on retry, publish a daily reconciled sales report, route unmapped SKUs and identity candidates to named stewards, and demonstrate a masked dashboard refresh with visible source and refresh time. Pause expansion if privacy, restore, reconciliation, or store-acceptance tests fail.</p>
+<h2>Cost and risk discipline</h2>
+<p>The attached working allocation sums to UGX 480M: staff/backfill/training 72M; connectivity/edge/UPS 50M; endpoint/database security and recovery 65M; software/support 45M; integration/warehouse 90M; privacy/legal/audit 40M; quality/MDM 45M; dashboard/adoption 22M; controlled contingency 51M. These are planning allocations, not vendor quotes. CFO approval should require current total-cost estimates, recurring costs, taxes, and named exit criteria for each phase. Do not commit contingency to unmeasured streaming or an enterprise catalog.</p>
+<h2>The Board&#39;s role</h2>
+<p>Name the COO as sponsor, require owners to accept measurable quality and retention controls, and review monthly risk/benefit evidence. Ask for evidence of reconciliation, recovery, access, and customer-rights handling—not a count of tools installed. A legal review must verify Uganda obligations and EU transfer/breach duties before relying on any compliance conclusion. The first release is a controlled pilot, not a promise that every dataset is already accurate or that the scenario&#39;s reported figures have been validated.</p></section>
+<section class="appendix"><h1>Red-team critique of the proposed strategy</h1>
+<p><strong>AI-assisted draft for individual review.</strong> The strongest case against this strategy is that its apparent simplicity hides an operating burden SRG may not be able to carry. Four IT staff, only two of whom write SQL, are already supporting 23 disconnected POS installations, an e-commerce site, a mobile loyalty application, CRM, Odoo, payroll, supplier spreadsheets, and manual payment reconciliation. Adding an integration hub, warehouse, Type-2 dimensions, identity crosswalk, security logs, and a governance council creates more components to patch and more failure modes. A six-month “quick win” can become another pilot that works at HQ but fails at remote stores. If the team cannot monitor retries, resolve schema drift, restore backups, and explain failed loads, the new platform may merely move spreadsheet work into unmaintained pipelines.</p>
+<p>The hub-and-spoke choice also risks central political capture. A central customer owner may label a store&#39;s legitimate local signup “bad data” and prevent sales; a marketing owner may use the golden record to expand profiling beyond what customers understood. A council chaired by executives can silence stewards who report poor source data, while the IT team is blamed for defects created by incentives and rushed procedures. A provisional offline ID avoids blocking checkouts, but synchronization can still award points to the wrong person or replay a sale twice. The strategy&#39;s thresholds (95 for auto-link, 75 for review) look precise despite having no adjudicated training set. If management treats them as scientifically validated, automation could multiply identity errors at scale.</p>
+<p>The cost estimate is another weak point. UGX 480 million is both a hard scenario limit and a budget that must cover licenses, cloud, staff time, security, legal review, hardware, and connectivity. The line items are planning placeholders, not vendor quotations. Taxes, implementation, support, exchange rates, replacement devices, data transfer, and recurring fees can consume the contingency. A managed catalog or cloud service may add foreign currency exposure and processor/transfer obligations. If the budget is cut or spent early, an unfinished hybrid estate could be less secure than today&#39;s systems.</p>
+<p>Connectivity and power are not temporary nuisances. Buffering events at a store creates a local cache of customer and transaction data; that cache needs encryption, key recovery, expiry, tamper resistance, conflict handling, and support when a device is replaced. If these controls depend on stable internet, stores may bypass them. If they depend on local expertise, outages will produce unrecoverable queues. A nightly ETL job can also produce misleading totals if late transactions arrive after a stock or sales snapshot; fast dashboards do not fix inconsistent source clocks or incomplete returns.</p>
+<p>Privacy controls can fail in subtler ways. Masked values are often pseudonymous, and stable IDs still permit linkage. A “coarse” footfall stream may become identifying when joined with a rare purchase or shift schedule. Retention periods are deliberately left for legal review, but delays in setting them could permit indefinite copies. The report cites comparative breach cases without treating them as SRG cost estimates; nonetheless, those examples can distort a CFO decision if local legal exposure, customer behavior, and recovery costs differ.</p>
+<p>The rebuttal is not to ignore these objections but to make each a release gate. Do not expand beyond two representative stores until tests prove idempotent replay, conflict resolution, backup restoration, and staff acceptance. Keep source systems operational and make the hub rebuildable from versioned exports. Make matching thresholds provisional and prohibit automated merge until a reviewed sample shows acceptable false-merge rates across district/name groups. Use a council charter with published exception metrics and an escalation path outside the data owner. Stage vendor decisions against written total-cost and legal reviews; if funding is insufficient, defer the catalog, streaming, and broad cloud migration before deferring encryption, incident response, access review, or backups.</p>
+<p>Some objections may still win. If remote stores cannot reliably protect and replay queued records, the correct answer is not to force a central real-time signup; keep provisional local identities and defer point transfers until review. If counsel cannot approve the EU transfer model, postpone that rollout. If the BI dataset cannot be reconciled to finance, withhold the Board dashboard rather than decorate uncertainty with charts. The strategy should be judged by measured error reduction, timely incident handling, restored service, and staff use—not by how many tools were installed.</p></section>
+<section class="appendix"><h1>Reflection on the Project Savanna portfolio</h1>
+<p>This project changed how I think about data work. At the start, it was easy to see the brief as a technology problem: connect several systems, clean the records, and build a dashboard. Working through the design and the available files made that view feel incomplete. A system can move data quickly and still produce a misleading answer. The harder work is agreeing what a record means, who is responsible for it, and what the evidence can honestly support.</p>
+<p>One practical lesson came from profiling the files in the workspace. The customer, product, sales, supplier, loyalty, HR-schema, and footfall examples looked like the inputs needed for analysis, but the data README identifies them as fabricated test fixtures. I could calculate exact results for those files, including seven accepted sales rows and one ambiguous date quarantined, but I could not turn them into claims about SRG. That distinction matters. Numbers can look authoritative simply because they have decimal places or sit in a polished report. I now see provenance, denominators, and limitations as part of the result, not footnotes to add later.</p>
+<p>The same discipline shaped the ETL diagnosis. The requested error log was not present, so there was no defensible way to name the cause of the assignment&#39;s broken job. The local PostgreSQL test did run successfully and could be replayed without creating duplicate facts, but that only demonstrates the test pipeline. The rejected ambiguous date and the expected access-denied result each have different meanings. Separating those cases taught me to describe what happened before reaching for a root-cause explanation. It is better to report a clear evidence gap than to fill it with a plausible story.</p>
+<p>The data model also raised a useful question about identity. A matching phone number is not proof that two rows describe the same person. People share phones, change numbers, and sometimes choose not to provide one. A reversible crosswalk and a human review queue are less tidy than automatic merging, but they leave room to correct mistakes. I would rather preserve a little duplication temporarily than combine two people&#39;s histories without a sound basis. This is a technical choice with consequences for privacy, fairness, loyalty points, and the customer&#39;s ability to challenge an error.</p>
+<p>The proposed store design asks for a similar balance. Intermittent power and connectivity are not edge cases if staff encounter them as part of ordinary work. An online-only design would make a store&#39;s service depend on conditions outside its control. Keeping local operations usable and reconciling signed, idempotent events later is more complicated, but more realistic. It also requires clear conflict rules and monitoring; “offline first” is not a reason to ignore data quality.</p>
+<p>Privacy decisions need the same practical attention. A loyalty service may need contact details to operate an account, but marketing and detailed personalization are separate purposes that should be explained and controlled. Footfall counts may help with staffing, while joining movement histories to loyalty profiles would create a much more intrusive system. I learned not to equate technical ability with permission or necessity. Before collecting a new field, I should be able to explain its purpose, access, retention, and the less intrusive alternatives considered.</p>
+<p>The dashboard work reinforced that presentation is part of responsible analysis. The local page now reads aggregates generated from accepted fixture rows, and its filters and return values can be checked. It is still only a demonstration. A useful chart should make its grain, time period, currency, and limitations visible; it should not make a small synthetic sample look like a business trend. I also learned to distinguish a working artifact from a published service. A local HTML page is not a governed production dashboard.</p>
+<p>I used AI assistance while preparing this portfolio, so I also had to think about how to check work that can sound confident. Generated text and code need to be compared with source files, test results, and the assignment requirements. In this case, the scripts, PostgreSQL checks, and calculated profiles provide evidence for specific technical claims, while the legal citations and scenario-scale business conclusions have limits that must stay visible. My responsibility is not removed by using a tool; it includes reviewing its output and disclosing the assistance according to course policy.</p>
+<p>For my next step, I would like to build toward an entry-level data management or analytics role, while learning more about which parts of the work suit me best. This project exposed areas I want to strengthen: writing reliable SQL, testing transformations, documenting lineage, and explaining privacy and quality trade-offs in plain language. Over the next six months, I can make that goal practical by completing a focused SQL and data-modeling course, building a small tested ETL project with a data dictionary, and reviewing a privacy impact assessment with a lecturer or mentor. I should keep examples of the work and ask for feedback rather than treat a certificate as proof of competence. If this career direction does not match my actual interests, I will revise it before submission; the plan is a starting point, not a claim about experience or qualifications I have not described.</p>
+<p>The standard I want to carry into future work is simple: separate what is known from what is inferred, and make it possible for another person to check the difference. Good data management is not just a clean table or a fast pipeline. It is a set of choices that people can understand, challenge, and correct. For SRG, success would mean that stores can keep serving customers, analysts can explain the numbers they report, and customers are not made less able to exercise choice just because the business has more data.</p></section>
+<section class="appendix"><h1>DPIA working template — proposed EU-facing loyalty rollout</h1>
+<p><strong>Status: not approved; facts and legal basis must be confirmed.</strong> This is a structured draft, not a completed legal DPIA or transfer assessment.</p>
+<h2>Processing description</h2>
+<ul>
+<li><strong>Purpose:</strong> loyalty administration and, only where justified and enabled,</li>
+</ul>
+<p>personalized offers. Separate essential account processing from optional marketing.</p>
+<ul>
+<li><strong>People/data:</strong> adult and potentially household customers; identifiers,</li>
+</ul>
+<p>contact details, purchases, points, preferences, consent/objection records. Exclude precise location and sensitive-category inference by default.</p>
+<ul>
+<li><strong>Systems/recipients:</strong> loyalty application, POS/e-commerce, CRM, integration</li>
+</ul>
+<p>hub, processors, analytics; identify actual hosting regions/subprocessors.</p>
+<ul>
+<li><strong>Retention:</strong> propose purpose-specific periods and deletion across source,</li>
+</ul>
+<p>replicas, exports, and backups after counsel validates statutory/contractual needs. No default period is asserted.</p>
+<ul>
+<li><strong>Transfers:</strong> map Uganda/EU/other hosting and access locations; establish</li>
+</ul>
+<p>applicable GDPR Chapter V mechanism before any restricted transfer.</p>
+<h2>Necessity, proportionality, risks, mitigations</h2>
+<table>
+<tr>
+<th>Risk</th>
+<th>Harm</th>
+<th>Safeguard / evidence required</th>
+</tr>
+<tr>
+<td>Wrong customer match</td>
+<td>Purchases exposed; points misallocated; rights history corrupted</td>
+<td>Conservative thresholds, human review, reversible merge, access/audit logs</td>
+</tr>
+<tr>
+<td>Consent or purpose ambiguity</td>
+<td>Unwanted profiling/marketing</td>
+<td>Separate purposes, clear notices, granular choices, withdrawal propagation</td>
+</tr>
+<tr>
+<td>Breach of contact/purchase history</td>
+<td>Fraud, embarrassment, loss of trust</td>
+<td>Encryption, least privilege, MFA, monitored exports, tested incident response</td>
+</tr>
+<tr>
+<td>Household/shared identifier</td>
+<td>One person&#39;s activity attributed to another</td>
+<td>Phone not a sole identifier; no household inference without defined purpose</td>
+</tr>
+<tr>
+<td>Cross-border access</td>
+<td>Unlawful transfer or weak redress</td>
+<td>Data-flow map, processor due diligence, approved transfer mechanism and counsel</td>
+</tr>
+<tr>
+<td>Biased matching</td>
+<td>Unequal false-match rates by names/language/district</td>
+<td>Representative reviewed validation set, subgroup error review, appeal and rollback</td>
+</tr>
+<tr>
+<td>Function creep</td>
+<td>Loyalty data reused beyond expectation</td>
+<td>Purpose registry, access separation, council approval, documented compatibility review</td>
+</tr>
+</table>
+<p>Assess necessity against less intrusive alternatives, data minimization, expected benefit, and the residual risk to individuals. Obtain controller/DPO and counsel sign-off, consult a supervisory authority where legally required, and do not launch if high residual risk remains without the required process. Record data-subject rights, processor terms, security tests, retention evidence, breach contacts, and transfer mechanism before rollout.</p></section>
+<section class="appendix"><h1>Legal citation review</h1>
+<p><strong>Checked:</strong> 4 October 2026 <strong>Purpose:</strong> source-check citations used in this portfolio, not legal advice or a determination that any law applies to SRG.</p>
+<h2>European Union GDPR — citation checked</h2>
+<p>The primary source reviewed was the official <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">EUR-Lex text of Regulation (EU) 2016/679</a>.</p>
+<ul>
+<li><strong>Article 3</strong> is the territorial-scope provision. It covers processing in</li>
+</ul>
+<p>the context of an EU establishment and certain processing by a controller or processor outside the EU relating to offering goods or services to people in the EU or monitoring their behaviour there. Actual applicability depends on facts not established by this project.</p>
+<ul>
+<li><strong>Articles 5–6</strong> address processing principles and lawfulness; <strong>12–22</strong></li>
+</ul>
+<p>cover transparency and data-subject rights; <strong>25</strong> data protection by design/default; <strong>28</strong> processors; <strong>30</strong> records of processing; <strong>32</strong> security; <strong>35</strong> data-protection impact assessment; and <strong>44–49</strong> international transfers. These references match the cited subjects.</p>
+<ul>
+<li><strong>Article 33</strong> requires a controller to notify the competent supervisory</li>
+</ul>
+<p>authority without undue delay and, where feasible, within 72 hours after becoming aware of a personal-data breach, unless the breach is unlikely to result in a risk to individuals. If notification is later than 72 hours, reasons for delay must accompany it. A processor must notify its controller without undue delay. <strong>Article 34</strong> separately addresses communication to affected individuals where the breach is likely to result in a high risk, subject to the exceptions in that Article.</p>
+<p>The portfolio now states the risk thresholds and does not present 72 hours as an unconditional rule. The GDPR clock must not be applied to Uganda processing unless the Regulation&#39;s territorial conditions are met.</p>
+<h2>Uganda — framework identified; section-level citation not verified</h2>
+<p>The framework named in the portfolio is the <strong>Data Protection and Privacy Act, 2019 (Act 9 of 2019)</strong>. The <a href="https://pdpo.go.ug/">Personal Data Protection Office (PDPO) website</a> is the official source location identified for Uganda privacy guidance. However, the Act link exposed from that site returned the site&#39;s application shell rather than readable statute text in this verification pass; the <a href="https://pdpo.go.ug/wp-content/uploads/2021/06/Data-Protection-and-Privacy-Act-2019.pdf">PDPO-hosted Act link</a> could not be independently inspected.</p>
+<p>Accordingly, this review does <strong>not</strong> certify Uganda section numbers, subordinate-instrument provisions, current PDPO guidance, or any breach notification deadline. The report deliberately states no Uganda deadline and does not borrow the GDPR&#39;s 72-hour period. Before submission or operational use, check the current Gazette/official consolidated Act, applicable regulations, and PDPO guidance with a qualified Ugandan privacy professional or counsel. Update the compliance register only after matching each claimed duty to the current primary text.</p>
+<h2>Effect on the deliverable</h2>
+<p>The verified GDPR article references and the Uganda source-access limitation are documented in the portfolio and compliance register. The legal assessment remains a release gate: no processing-role analysis, registration status, lawful basis, transfer mechanism, or notification decision has been verified for actual SRG processing.</p></section>
+<section class="appendix"><h1>Tableau Public dashboard — publication handoff</h1>
+<p><strong>Status: website reachable; desktop sign-in still blocked.</strong> The owner is signed in to the Tableau Public website, and the safe aggregate CSV was imported into Tableau Public 2023.2. The existing local worksheet is still open and shows seven marks with total net sales of UGX 50,400. Native HTTPS requests to Tableau Public&#39;s <code>/app</code> routes now return HTTP 200, but Tableau 2023.2&#39;s embedded sign-in still shows <code>ERR_CONNECTION_RESET</code>, including after reloading the sign-in page. The website session does not authenticate the desktop client. No public workbook or live view URL has been created. Do not present the local worksheet or CSV as a published Tableau view.</p>
+<h2>Safe import file</h2>
+<p>Open <a href="../dashboard/workspace-synthetic-sales-aggregates.csv"><code>workspace-synthetic-sales-aggregates.csv</code></a> from the <code>dashboard/</code> folder. The local profiling pipeline regenerates it from accepted, cleansed sales and product rows. It has seven grouped records with month, district, channel, product category, net sales (UGX), transaction count, and net units. It excludes customer IDs, order IDs, payment references, phone numbers, and row-level transaction data.</p>
+<p>The fixture README identifies these values as fabricated test fixtures. Retain a visible dashboard disclaimer that they are not SRG business findings.</p>
+<h2>Build and publish in Tableau Public</h2>
+<ul>
+<li>In the open Tableau Public 2023.2 local workbook, verify the <strong>Text file</strong></li>
+</ul>
+<p>connection points to the safe CSV. Check that there are seven rows and these fields: <code>month</code>, <code>district</code>, <code>channel</code>, <code>category</code>, <code>net_sales_ugx</code>, <code>transactions</code>, and <code>net_units</code>.</p>
+<ul>
+<li>Set the four dimension fields to String (month is ISO <code>YYYY-MM</code> text).</li>
+</ul>
+<p>Set <code>net_sales_ugx</code> and <code>net_units</code> to Number (decimal), and <code>transactions</code> to Number (whole).</p>
+<ul>
+<li>Build a monthly sales worksheet with <code>month</code> on Columns and <code>SUM(net_sales_ugx)</code></li>
+</ul>
+<p>on Rows. Build a category sales bar chart with <code>category</code> and <code>SUM(net_sales_ugx)</code>. Add KPI sheets for total net sales, transaction count, and net units. Keep the negative return in both amount and units.</p>
+<ul>
+<li>Add filters for month, district, channel, and category; apply them to all</li>
+</ul>
+<p>relevant worksheets and assemble the views into a dashboard.</p>
+<ul>
+<li>Put this disclaimer prominently on the dashboard:</li>
+</ul>
+<p><strong>Synthetic workspace fixtures only — not SRG business findings.</strong> Note that one of eight input sales rows was quarantined and the displayed values are grouped aggregates of the seven accepted rows.</p>
+<ul>
+<li>Review the workbook for sensitive fields and confirm the data source is</li>
+</ul>
+<p>only the grouped CSV. Tableau Public workbooks and published data are public; anyone may be able to view, download, or reuse them. Do not publish private or real customer data to Tableau Public.</p>
+<ul>
+<li>The Tableau Public website sign-in is complete, but the desktop client</li>
+</ul>
+<p>needs its own successful authentication. Retry the desktop sign-in or use an updated Tableau Public client if its embedded page continues to reset. Then use <strong>File → Save to Tableau Public</strong> (wording can differ slightly by version). Publish only after confirming the workbook contains this synthetic aggregate dataset.</p>
+<ul>
+<li>Open the published view in a signed-out/private browser. Copy the actual</li>
+</ul>
+<p>public view URL into <code>docs/portfolio.md</code> and the finalization checklist. Never use a local <code>file:</code> URL or invent a Tableau URL.</p>
+<p><strong>Live Tableau Public URL:</strong> Not published — Tableau 2023.2 desktop authentication still fails with <code>ERR_CONNECTION_RESET</code>; authenticate, save, and verify the resulting view before adding a link.</p>
+<p>Do not share credentials in the project or chat. The browser session is authenticated and native requests now reach Tableau Public&#39;s <code>/app</code> routes, but the desktop embedded sign-in continues to reset. If that remains the case, keep the local worksheet as the demonstration and state that external publication is blocked.</p></section>
+<section class="appendix"><h1>Final-submission readiness checklist</h1>
+<p><strong>Current state: complete for the files available in this workspace; still a working draft rather than a verified final SRG business analysis.</strong> The user instructed us to treat the present workspace dataset as the complete provided set. The fixture README itself describes those values as fabricated. This report therefore gives calculated results for the current files without presenting them as real SRG observations.</p>
+<h2>Completed and verified</h2>
+<ul>
+<li>[x] Assignment brief copied into the project.</li>
+<li>[x] Consultancy report, board memo, architecture/design recommendations,</li>
+</ul>
+<p>governance/RACI, risk and decision registers, DPIA working draft, data dictionary, validation rules, and source diagrams created.</p>
+<ul>
+<li>[x] All available customer, product, sales, supplier, loyalty, HR-schema, and</li>
+</ul>
+<p>footfall files inventoried with hashes and profiled; report caveats preserved.</p>
+<ul>
+<li>[x] PowerShell demo pipeline generates standardized outputs, review queues,</li>
+</ul>
+<p>masking, and before/after profile metrics.</p>
+<ul>
+<li>[x] Sixteen pipeline assertions pass.</li>
+<li>[x] PostgreSQL 17 schema and RBAC applied to local <code>savanna_edm_demo</code>.</li>
+<li>[x] Synthetic staging/ETL re-run test passes; seven accepted fact rows are</li>
+</ul>
+<p>stable after replay, one ambiguous date is excluded, and a documented return remains negative.</p>
+<ul>
+<li>[x] Negative RBAC evidence: <code>srg_analytics</code> can read the masked view and is</li>
+</ul>
+<p>denied access to the restricted schema/table.</p>
+<ul>
+<li>[x] Local interactive synthetic dashboard and screenshot created.</li>
+<li>[x] Dashboard data regenerated from accepted sales rows, not hand-entered</li>
+</ul>
+<p>example values.</p>
+<ul>
+<li>[x] Cross-source completeness, validity, consistency, uniqueness, privacy</li>
+</ul>
+<p>schema, and measurable/unmeasurable accuracy/timeliness indicators exported.</p>
+<ul>
+<li>[x] ETL log diagnosis recorded as not evidenced because the named file is not</li>
+</ul>
+<p>in the full workspace inventory; successful local ETL and expected RBAC denial are distinguished from the absent broken-job log.</p>
+<ul>
+<li>[x] GDPR article references and breach-notification qualifiers checked</li>
+</ul>
+<p>against EUR-Lex; Uganda Act source limitation recorded without inventing section numbers or a notification deadline.</p>
+<ul>
+<li>[x] Project-based first-person reflection added with a practical development</li>
+</ul>
+<p>plan; it avoids invented biography and marks career direction as tentative.</p>
+<ul>
+<li>[x] Publication-safe, grouped sales aggregate CSV generated for Tableau;</li>
+</ul>
+<p>customer/order/payment identifiers are excluded.</p>
+<ul>
+<li>[x] Tableau Public website sign-in confirmed; safe CSV opened in local</li>
+</ul>
+<p>Tableau Public and a worksheet created.</p>
+<ul>
+<li>[x] Consolidated 33-page working-draft PDF rendered under the assignment&#39;s</li>
+</ul>
+<p>40-page limit.</p>
+<h2>Evidence files absent from this workspace</h2>
+<p>The available data directory contains <code>data/demo/</code>. The workspace inventory lists every present file, byte size, SHA-256, and these absent assignment files:</p>
+<ul>
+<li><code>SRG_Customers.csv</code> and <code>SRG_Products.csv</code> at the actual assignment scale.</li>
+<li><code>SRG_Sales.csv</code> and its unnormalized source extract.</li>
+<li><code>SRG_Suppliers.csv</code> and <code>SRG_Loyalty.csv</code> actual source files.</li>
+<li><code>SRG_HR.xlsx</code> (so actual sensitive-column inventory is unknown).</li>
+<li><code>etl_error_log.txt</code> (so a specific root cause cannot be stated).</li>
+<li><code>footfall_stream_sample.json</code> (only a fabricated demo stream exists).</li>
+</ul>
+<p>The current deliverable handles these gaps with explicit assumptions and does not invent values, a diagnosis, or workbook fields. If a later version of the assignment includes them, revise the report and recalculate rather than silently mixing versions.</p>
+<h2>Blocked: student-specific or external actions</h2>
+<ul>
+<li><strong>Reflection/career plan:</strong> review</li>
+</ul>
+<p><code>reflective-essay-draft.md</code> in your own voice. The proposed entry-level data management/analytics direction is tentative; change it if it does not fit your actual interests and current skills.</p>
+<ul>
+<li><strong>AI-use statement:</strong> add the exact disclosure required by KIU policy; do</li>
+</ul>
+<p>not remove the existing disclosure of AI assistance.</p>
+<ul>
+<li><strong>Uganda legal references:</strong> confirm exact section numbers and applicable</li>
+</ul>
+<p>duties/deadlines against the current official Act, regulations, and PDPO guidance or with qualified counsel. See <code>legal-citation-review.md</code>; the official PDPO Act link returned an application shell during this check, so the portfolio deliberately asserts no Uganda notification deadline.</p>
+<ul>
+<li><strong>Tableau Public publication:</strong> import the safe aggregate CSV using</li>
+</ul>
+<p><code>docs/dashboard-publication.md</code>; the owner has signed in, the worksheet is open locally, and its seven marks total UGX 50,400. Native requests to the Tableau Public <code>/app</code> routes return HTTP 200, but the Tableau 2023.2 desktop sign-in still fails with <code>ERR_CONNECTION_RESET</code>. Authenticate in the desktop client (or use an updated client), finish the view/dashboard, and save publicly only after confirming a fully public workbook is acceptable. Add and verify the genuine live URL afterward.</p>
+<ul>
+<li><strong>Final authorship/viva:</strong> check every assumption and finding, add your own</li>
+</ul>
+<p>decisions/evidence, and make sure you can explain each SQL/script/diagram in the viva.</p>
+<h2>Re-finalize after completing blockers</h2>
+<ul>
+<li>Update the report, evidence registers, dashboard, and this checklist.</li>
+<li>Run <code>scripts\test-pipeline.ps1</code> and <code>scripts\test-postgres.ps1</code> against a</li>
+</ul>
+<p>disposable database only.</p>
+<ul>
+<li>Run <code>scripts\render-portfolio.ps1</code> and confirm the PDF page count remains</li>
+</ul>
+<p>within the course limit.</p>
+<ul>
+<li>Review the PDF and all linked artifacts manually before submission.</li>
+</ul></section>
+<section class="appendix"><h1>Broken ETL log diagnosis — evidence template</h1>
+<p><strong>Workspace result:</strong> <code>etl_error_log.txt</code> is not present in the recorded workspace inventory for this run. A specific root cause cannot be inferred from an absent log. The SQL pipeline execution transcript is available at <code>output/postgres-demo-etl-log.txt</code>; it records successful staging and two successful idempotent ETL runs on the demo data, not the assignment&#39;s broken job.</p>
+<p>The observed pipeline results were: 7 fixture rows staged, 7 promoted in the first run, and 7 still present after replay; the ambiguous-date order was excluded; the documented return remained negative. The expected denial when the analytics role attempted restricted-schema access is an RBAC pass, not an ETL error.</p>
+<p>Use the template below if the broken-job log is later supplied. Do not convert the candidate causes into findings without log evidence.</p>
+<table>
+<tr>
+<th>Evidence</th>
+<th>Capture</th>
+</tr>
+<tr>
+<td>File/run ID, start/end, environment</td>
+<td></td>
+</tr>
+<tr>
+<td>First exception and stack (not only final retry)</td>
+<td></td>
+</tr>
+<tr>
+<td>Failing task/table/partition and source watermark</td>
+<td></td>
+</tr>
+<tr>
+<td>Expected / extracted / transformed / loaded / rejected counts</td>
+<td></td>
+</tr>
+<tr>
+<td>Source schema and file hash vs prior successful run</td>
+<td></td>
+</tr>
+<tr>
+<td>Credential/secret rotation or permission change</td>
+<td></td>
+</tr>
+<tr>
+<td>Network, timeout, lock, disk, and memory evidence</td>
+<td></td>
+</tr>
+<tr>
+<td>Target transaction state, duplicate keys, partial commits</td>
+<td></td>
+</tr>
+<tr>
+<td>Reproduction on a copied/quarantined batch</td>
+<td></td>
+</tr>
+</table>
+<p>Hypotheses to test: null/type conversion, changed source schema, duplicate-key retry, expired credentials, connectivity/timeout, lock/contention, and watermark advancement before a transaction commits. For each supported cause, record corrective action, preventive test/alert, owner, and a replay procedure. Restore from immutable raw input; make loads idempotent; reconcile counts and financial control totals before advancing a watermark.</p></section>
+<section class="appendix"><h1>Executive insight brief — evidence status</h1>
+<p><strong>No verified SRG findings are available.</strong> All available workspace files were profiled as requested, but their README identifies the records as fabricated test fixtures. Their small sample results demonstrate the pipeline only; they cannot support conclusions about SRG customers, sales, stock, payments, or operational performance. The workspace contains no real assignment-scale extracts.</p>
+<p>The three cards below remain open for authorized SRG data. The workspace fixture dashboard is generated from seven accepted sales rows and is not a source for business findings. Complete the cards only after source evidence is authorized, reconciled, and reviewed. Every finding should state the period, population, measure/denominator, comparison, limitation, and source refresh date.</p>
+<h2>Finding 1 — customer retention and segment growth</h2>
+<ul>
+<li><strong>Observed result:</strong> <code>[calculate from reviewed customer/loyalty activity; define an active window and eligibility]</code></li>
+<li><strong>Evidence and confidence:</strong> <code>[source tables, exclusions, deduplication rule, refresh time]</code></li>
+<li><strong>Recommended action:</strong> <code>[owner, cohort, measurable test, review date]</code></li>
+</ul>
+<h2>Finding 2 — stock-outs versus excess stock</h2>
+<ul>
+<li><strong>Observed result:</strong> <code>[compare availability, sales velocity, stock snapshot, returns, and store over time]</code></li>
+<li><strong>Evidence and confidence:</strong> <code>[SKU/store grain, unit normalization, reconciliation status]</code></li>
+<li><strong>Recommended action:</strong> <code>[pilot replenishment or transfer; track stock-out rate and days-on-hand]</code></li>
+</ul>
+<h2>Finding 3 — payment exception or expansion decision</h2>
+<ul>
+<li><strong>Observed result:</strong> <code>[reconcile provider reference/amount/currency; or use approved expansion criteria]</code></li>
+<li><strong>Evidence and confidence:</strong> <code>[provider feed and completeness, unmatched rate, period]</code></li>
+<li><strong>Recommended action:</strong> <code>[Finance/Operations owner and control change]</code></li>
+</ul>
+<p>Do not copy the synthetic dashboard&#39;s apparent trends into this brief.</p></section>
+<section class="appendix"><h1>Viva preparation</h1>
+<p>Practice answering these in your own words. All example claims must be checked against actual project evidence.</p>
+<ul>
+<li><strong>Why hub-and-spoke instead of centralizing POS?</strong> Preserve offline checkout</li>
+</ul>
+<p>and reconcile idempotently when connectivity returns; test two stores first.</p>
+<ul>
+<li><strong>What happens to an offline customer signup?</strong> Create a source-prefixed</li>
+</ul>
+<p>provisional ID, record purpose and source event, queue it securely, award no points to a guessed identity, and reconcile/review after sync.</p>
+<ul>
+<li><strong>Why does a 95 match score not prove identity?</strong> Weights are heuristics, not</li>
+</ul>
+<p>calibrated probabilities; require multiple independent attributes and a false-merge validation set.</p>
+<ul>
+<li><strong>How do you diagnose 8.4% variance?</strong> Align SKU/unit/store/time grains,</li>
+</ul>
+<p>match receipts, sales, returns and cycle counts, separate timing from shrinkage, and validate causes before adjusting stock.</p>
+<ul>
+<li><strong>What could break the ETL?</strong> Schema drift, locale/date ambiguity, duplicate</li>
+</ul>
+<p>replay, expired credentials, delayed offline events, and a watermark committed before facts. Explain quarantine, transaction, replay and reconciliation.</p>
+<ul>
+<li><strong>What would you do with half the budget?</strong> Preserve incident controls,</li>
+</ul>
+<p>endpoint encryption, recovery, access, minimum owner/steward capacity, and daily finance reconciliation; defer streaming, broad cloud migration, commercial catalog, and rollout beyond pilot.</p>
+<ul>
+<li><strong>Why not real-time everything?</strong> Only pay for latency where a faster signal</li>
+</ul>
+<p>changes an action. Most finance reporting and trend analysis can be daily; broad streaming increases cost and operational failure modes.</p>
+<ul>
+<li><strong>What is masked data?</strong> Pseudonymized data can still be linkable; protect</li>
+</ul>
+<p>stable IDs, limit access, and do not call it anonymous without a risk test.</p>
+<ul>
+<li><strong>What legal conclusion needs counsel?</strong> Uganda registration and breach</li>
+</ul>
+<p>duties, GDPR territorial scope and transfer mechanism, CCPA applicability, retention, and any regulator/data-subject notification decision.</p>
+<ul>
+<li><strong>What is your authorship/AI declaration?</strong> Give a truthful account of</li>
+</ul>
+<p>which tools assisted, what you verified, what you changed, and demonstrate understanding of every artifact.</p></section>
+<section class="appendix"><h1>assumptions register</h1>
+<table class="register"><thead><tr>
+<th>id</th>
+<th>assumption</th>
+<th>reason</th>
+<th>owner</th>
+<th>validation</th>
+<th>review_by</th>
+<th>status</th>
+</tr></thead><tbody>
+<tr>
+<td>A01</td>
+<td>Store POS databases support a repeatable read-only export</td>
+<td>Needed for incremental/batch integration</td>
+<td>IT lead</td>
+<td>Test two-store connector and outage replay</td>
+<td>M3</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A02</td>
+<td>Each source can expose a stable source record ID</td>
+<td>Needed for crosswalk and idempotency</td>
+<td>IT lead</td>
+<td>Inventory source schemas and collision rates</td>
+<td>M2</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A03</td>
+<td>Stores must continue checkout during connectivity outages</td>
+<td>Operational constraint in brief</td>
+<td>Retail Operations</td>
+<td>Confirm maximum offline duration and recovery targets</td>
+<td>M2</td>
+<td>Scenario fact</td>
+</tr>
+<tr>
+<td>A04</td>
+<td>Household members may share phone numbers</td>
+<td>Prevents unsafe phone-only identity merge</td>
+<td>Customer owner</td>
+<td>Review sample and store practices</td>
+<td>M3</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A05</td>
+<td>Customer consent and marketing preferences are not consistent across channels</td>
+<td>Reported siloed channels</td>
+<td>Privacy focal person</td>
+<td>Inspect notices and event logs</td>
+<td>M2</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A06</td>
+<td>Current annual EDM/data budget ceiling is UGX 480 million</td>
+<td>Scenario constraint</td>
+<td>CFO</td>
+<td>Confirm tax and recurring cost treatment</td>
+<td>M1</td>
+<td>Scenario fact</td>
+</tr>
+<tr>
+<td>A07</td>
+<td>IT has four staff and two SQL-capable staff</td>
+<td>Scenario constraint</td>
+<td>IT lead</td>
+<td>Confirm allocation and availability</td>
+<td>M1</td>
+<td>Scenario fact</td>
+</tr>
+<tr>
+<td>A08</td>
+<td>Named district reference list can be obtained from business owners</td>
+<td>Needed for valid district checks</td>
+<td>Customer owner</td>
+<td>Approve maintained canonical list</td>
+<td>M2</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A09</td>
+<td>All source currencies can be identified from source fields or contract</td>
+<td>Needed to normalize amounts</td>
+<td>Finance owner</td>
+<td>Map currency per source and transaction</td>
+<td>M2</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A10</td>
+<td>Footfall stream can be configured to emit non-identifying counts only</td>
+<td>Privacy-by-design condition</td>
+<td>Store Operations</td>
+<td>Inspect payload and sensor settings before pilot</td>
+<td>M3</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A11</td>
+<td>The stolen laptop incident has not yet been fully assessed</td>
+<td>Brief says notification was not made</td>
+<td>COO and privacy focal</td>
+<td>Preserve records and obtain counsel review</td>
+<td>Immediate</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A12</td>
+<td>The provided unnormalized extract has repeating line/payment groups</td>
+<td>Illustrative normalization scenario only</td>
+<td>Finance owner</td>
+<td>Inspect original extract columns</td>
+<td>Before final report</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A13</td>
+<td>User-provided demo data are synthetic and have no real data subjects</td>
+<td>Fixtures are made-up test records</td>
+<td>Project maintainer</td>
+<td>Check fixtures before commit/release</td>
+<td>Every change</td>
+<td>Validated</td>
+</tr>
+<tr>
+<td>A14</td>
+<td>Cloud/BI vendor pricing is unknown</td>
+<td>No quotations were provided</td>
+<td>CFO and IT lead</td>
+<td>Collect total-cost-of-ownership quotes</td>
+<td>M5</td>
+<td>Unverified</td>
+</tr>
+<tr>
+<td>A15</td>
+<td>The GDPR applies only where territorial/material scope tests are met</td>
+<td>EU partnership alone is not sufficient proof</td>
+<td>Privacy focal and counsel</td>
+<td>Map establishment/targeting/data subjects</td>
+<td>Before EU rollout</td>
+<td>Legal review required</td>
+</tr>
+<tr>
+<td>A16</td>
+<td>The files currently under data/demo are the complete files available in this workspace for this execution</td>
+<td>User explicitly instructs treating the workspace dataset as complete</td>
+<td>Project maintainer</td>
+<td>Inventory all workspace files and hashes; compare only when an additional course file is supplied</td>
+<td>This run</td>
+<td>Accepted scope assumption</td>
+</tr>
+<tr>
+<td>A17</td>
+<td>The available customer/product/sales/supplier/loyalty/HR/footfall rows are synthetic test fixtures and not measured SRG observations</td>
+<td>The data/demo/README.md explicitly says every value is fabricated</td>
+<td>Project maintainer</td>
+<td>Preserve fixture provenance and label all metrics/dashboard output as workspace synthetic fixtures</td>
+<td>Every report</td>
+<td>Confirmed by fixture documentation</td>
+</tr>
+<tr>
+<td>A18</td>
+<td>No ETL error log is available</td>
+<td>Workspace inventory contains no etl_error_log.txt; successful test transcript is not the broken assignment log</td>
+<td>IT lead</td>
+<td>Re-run log diagnosis if the missing log is later supplied; never infer a specific exception</td>
+<td>This run</td>
+<td>Not present; diagnosis not evidenced</td>
+</tr>
+<tr>
+<td>A19</td>
+<td>SRG_HR_SAMPLE.csv is a schema illustration and not the assignment workbook</td>
+<td>One demo row uses obvious fake values; SRG_HR.xlsx not present</td>
+<td>HR owner</td>
+<td>Review the actual workbook if supplied and classify every field before loading</td>
+<td>This run</td>
+<td>Accepted technical limitation</td>
+</tr>
+<tr>
+<td>A20</td>
+<td>Small fixture counts cannot support scenario-scale estimates or production thresholds</td>
+<td>Current files contain 8 customers/6 products/8 sales rather than scenario quantities</td>
+<td>Data owners</td>
+<td>Recompute statistics with authorized scenario-scale records and confidence checks</td>
+<td>Before claiming SRG findings</td>
+<td>Confirmed from inventory</td>
+</tr>
+<tr>
+<td>A21</td>
+<td>Ambiguous dates are rejected instead of locale-guessed</td>
+<td>Fixture contains slash date where day and month are both &lt;= 12</td>
+<td>Finance/data steward</td>
+<td>Confirm source export locale and date contract</td>
+<td>Before production ETL</td>
+<td>Applied conservative rule</td>
+</tr>
+<tr>
+<td>A22</td>
+<td>Only three-letter currency syntax is validated in demo profiling</td>
+<td>Fixture contains UGX but no ISO reference</td>
+<td>Finance owner</td>
+<td>Validate against ISO 4217 reference and reconcile provider settlement totals</td>
+<td>Before production ETL</td>
+<td>Applied syntax-only check</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>decision log</h1>
+<table class="register"><thead><tr>
+<th>id</th>
+<th>decision</th>
+<th>alternatives</th>
+<th>evaluation_criteria</th>
+<th>evidence_used</th>
+<th>choice</th>
+<th>review_trigger</th>
+</tr></thead><tbody>
+<tr>
+<td>D01</td>
+<td>Use hub-and-spoke with offline-tolerant spokes</td>
+<td>Fully centralized; decentralized; federated</td>
+<td>Offline resilience; cost; skills; consistency; auditability</td>
+<td>Scenario states 23 stores and intermittent connectivity</td>
+<td>Select hub-and-spoke for pilot</td>
+<td>If pilot sync cannot meet integrity and recovery targets</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>Use coexistence MDM</td>
+<td>Registry; consolidation-only; centralized replacement</td>
+<td>False-merge risk; outage behavior; source autonomy; integration effort</td>
+<td>Scenario has independent POS/web/loyalty/CRM</td>
+<td>Keep source IDs and hub golden ID</td>
+<td>If measured duplicate rate or vendor capability changes materially</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>Start with batch warehouse ETL</td>
+<td>Cloud ELT; stream everything; manual reporting</td>
+<td>Cost; latency; skill; supportability; control</td>
+<td>Two SQL staff and manual 11-day reporting</td>
+<td>Automate daily batch and selected exceptions</td>
+<td>If latency-bound use cases show quantified lost value</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>Human-review uncertain customer matches</td>
+<td>Phone-only auto-merge; ML model; no matching</td>
+<td>False-merge harm; auditability; workload</td>
+<td>23% duplicate estimate and shared/recycled phone risk</td>
+<td>Thresholded match queue with reversible link</td>
+<td>Only if adjudicated validation set demonstrates safe thresholds</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>Keep footfall analytics aggregate and non-identifying</td>
+<td>Person tracking; facial recognition; no sensor use</td>
+<td>Privacy; purpose; operational value; risk</td>
+<td>Brief requests stream architecture but provides no payload</td>
+<td>Aggregate occupancy/queue counts after DPIA</td>
+<td>If necessity/proportionality or consent basis fails</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>Use two-store pilot before 23-store rollout</td>
+<td>Big-bang deployment; fully local solutions</td>
+<td>Rollback; connectivity; skills; cost</td>
+<td>Intermittent connections and four-person IT team</td>
+<td>Two-store representative pilot with exit criteria</td>
+<td>If pilot coverage is not representative or outage replay fails</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>Adopt PostgreSQL-compatible warehouse pattern before vendor lock-in</td>
+<td>Commercial lakehouse; spreadsheets; custom platform</td>
+<td>Cost; portability; staff skills; governance</td>
+<td>No vendor quotations or cloud decision supplied</td>
+<td>Relational warehouse and portable SQL first</td>
+<td>If approved cloud TCO and operations evidence justify migration</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>Restrict analytics to masked/aggregated customer views</td>
+<td>Copy raw PII to BI; block all analysis</td>
+<td>Privacy; usefulness; access control; audit</td>
+<td>Stolen unencrypted export and loyalty sensitivity</td>
+<td>Masked role-based analytics dataset</td>
+<td>If approved use case and DPIA require a narrow identifiable view</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>risk register</h1>
+<table class="register"><thead><tr>
+<th>id</th>
+<th>threat</th>
+<th>vulnerability</th>
+<th>likelihood_1_5</th>
+<th>impact_1_5</th>
+<th>inherent_score</th>
+<th>mitigation</th>
+<th>owner</th>
+<th>residual_likelihood</th>
+<th>residual_impact</th>
+</tr></thead><tbody>
+<tr>
+<td>R01</td>
+<td>Lost or stolen endpoint exposes customer exports</td>
+<td>Local unencrypted exports; delayed report</td>
+<td>4</td>
+<td>5</td>
+<td>20</td>
+<td>Full disk encryption; block exports; MFA; remote revoke; incident drill</td>
+<td>IT lead / COO</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R02</td>
+<td>Insider bulk extraction</td>
+<td>Excess access and no monitoring</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Least privilege; export approvals; DLP/log review; sanctions and training</td>
+<td>IT lead</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R03</td>
+<td>Credential phishing leads to CRM/loyalty access</td>
+<td>Weak MFA or reused credentials</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>MFA; phishing-resistant admin auth; conditional access; recovery testing</td>
+<td>IT lead</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R04</td>
+<td>Ransomware disrupts store and HQ operations</td>
+<td>Unpatched systems and recoverability gaps</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Patch SLAs; segmented backups; offline restore tests; incident playbook</td>
+<td>IT lead</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R05</td>
+<td>Wrong customer records merged</td>
+<td>Ambiguous identifiers and unsafe auto-merge</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>Conservative rules; review queue; reversibility; rights-aware audit</td>
+<td>Customer owner</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>R06</td>
+<td>Offline sync replays transaction twice</td>
+<td>Missing idempotency keys or conflict policy</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>UUID/source sequence; idempotent load; reconciliation; dead-letter queue</td>
+<td>IT lead</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>R07</td>
+<td>Vendor compromise or misuse</td>
+<td>Weak processor due diligence and contracts</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Security review; DPA; subprocessor and incident clauses; access review</td>
+<td>COO / privacy</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R08</td>
+<td>HR/payroll spreadsheet is exposed</td>
+<td>Over-shared workbooks and sensitive fields</td>
+<td>3</td>
+<td>5</td>
+<td>15</td>
+<td>Inventory/minimize fields; restricted encrypted transfer; named access; delete copies</td>
+<td>HR owner</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R09</td>
+<td>Payment reconciliation fraud is missed</td>
+<td>Manual CSV delays and inconsistent reference IDs</td>
+<td>3</td>
+<td>4</td>
+<td>12</td>
+<td>Daily dual control; duplicate/refund rules; exception escalation</td>
+<td>Finance owner</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>R10</td>
+<td>Footfall data enables surveillance</td>
+<td>Person-level or linkable sensor payload</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Aggregate-only payload; DPIA; short approved retention; no identity join</td>
+<td>Store owner / privacy</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R11</td>
+<td>Cloud transfer violates locality/transfer duties</td>
+<td>Unreviewed regions and subprocessors</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>Transfer impact review; approved regions; contract controls; legal gate</td>
+<td>COO / counsel</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>R12</td>
+<td>Service outage or power interruption causes data loss</td>
+<td>Store connectivity and backup-power constraints</td>
+<td>4</td>
+<td>4</td>
+<td>16</td>
+<td>Offline queue; UPS; signed replay; recovery targets and restore drills</td>
+<td>IT lead / Retail Ops</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>data dictionary</h1>
+<table class="register"><thead><tr>
+<th>element</th>
+<th>business_definition</th>
+<th>technical_type</th>
+<th>source</th>
+<th>owner</th>
+<th>sensitivity</th>
+<th>quality_rule</th>
+<th>domain_tag</th>
+<th>quality_tag</th>
+</tr></thead><tbody>
+<tr>
+<td>source_system_id</td>
+<td>Identifier assigned by the originating system</td>
+<td>TEXT</td>
+<td>All source systems</td>
+<td>Domain owner</td>
+<td>Confidential</td>
+<td>Not null with source_system</td>
+<td>domain:shared</td>
+<td>quality:required</td>
+</tr>
+<tr>
+<td>source_record_id</td>
+<td>Stable primary key in a source</td>
+<td>TEXT</td>
+<td>Source extract</td>
+<td>Domain owner</td>
+<td>Confidential</td>
+<td>Unique within source_system_id</td>
+<td>domain:shared</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>golden_customer_id</td>
+<td>Hub-assigned non-semantic customer key</td>
+<td>UUID</td>
+<td>Customer MDM</td>
+<td>Customer owner</td>
+<td>Confidential</td>
+<td>Unique and never reused</td>
+<td>domain:customer</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>customer_name</td>
+<td>Customer display name</td>
+<td>TEXT</td>
+<td>POS web CRM loyalty</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Trimmed; provenance retained; no unsupported rewrite</td>
+<td>domain:customer</td>
+<td>quality:standardized</td>
+</tr>
+<tr>
+<td>customer_phone_e164</td>
+<td>Normalized phone where valid</td>
+<td>TEXT</td>
+<td>POS web CRM loyalty</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Canonical format or null with reason</td>
+<td>domain:customer</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>customer_email_normalized</td>
+<td>Lower-case normalized email</td>
+<td>TEXT</td>
+<td>Web CRM loyalty</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Syntax check; verification state separate</td>
+<td>domain:customer</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>customer_district</td>
+<td>District from governed reference</td>
+<td>TEXT</td>
+<td>POS web loyalty</td>
+<td>Customer owner</td>
+<td>Confidential</td>
+<td>Must map to approved code or pending-review</td>
+<td>domain:customer</td>
+<td>quality:conformed</td>
+</tr>
+<tr>
+<td>customer_address_line</td>
+<td>Address text with access restriction</td>
+<td>TEXT</td>
+<td>CRM web</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Effective-dated; minimize; retain source history</td>
+<td>domain:customer</td>
+<td>quality:reviewed</td>
+</tr>
+<tr>
+<td>customer_created_at</td>
+<td>Source creation timestamp</td>
+<td>TIMESTAMPTZ</td>
+<td>Source systems</td>
+<td>Customer owner</td>
+<td>Confidential</td>
+<td>Timezone and source system recorded</td>
+<td>domain:customer</td>
+<td>quality:timely</td>
+</tr>
+<tr>
+<td>consent_status</td>
+<td>Purpose-specific consent/legal-basis state</td>
+<td>TEXT</td>
+<td>Web loyalty CRM</td>
+<td>Privacy focal</td>
+<td>Restricted</td>
+<td>Allowed state and evidence reference required</td>
+<td>domain:customer</td>
+<td>quality:traceable</td>
+</tr>
+<tr>
+<td>marketing_preference</td>
+<td>Channel-specific opt-in/out</td>
+<td>TEXT</td>
+<td>CRM loyalty</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Latest verified event wins; keep event history</td>
+<td>domain:customer</td>
+<td>quality:current</td>
+</tr>
+<tr>
+<td>match_confidence</td>
+<td>Reviewed match score or confidence</td>
+<td>TEXT</td>
+<td>MDM service</td>
+<td>Customer steward</td>
+<td>Restricted</td>
+<td>Algorithm/rule version recorded; not treated as proof</td>
+<td>domain:customer</td>
+<td>quality:traceable</td>
+</tr>
+<tr>
+<td>product_id</td>
+<td>Warehouse product surrogate key</td>
+<td>BIGINT</td>
+<td>Warehouse</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Unique</td>
+<td>domain:product</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>source_sku</td>
+<td>SKU as delivered by source</td>
+<td>TEXT</td>
+<td>POS Odoo supplier files</td>
+<td>Product owner</td>
+<td>Confidential</td>
+<td>Preserve exact source value</td>
+<td>domain:product</td>
+<td>quality:traceable</td>
+</tr>
+<tr>
+<td>canonical_sku</td>
+<td>Governed cross-source product key</td>
+<td>TEXT</td>
+<td>Product crosswalk</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Unique when active; alias mapping audited</td>
+<td>domain:product</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>product_name</td>
+<td>Approved product display name</td>
+<td>TEXT</td>
+<td>Odoo procurement POS</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Non-empty and steward-reviewed</td>
+<td>domain:product</td>
+<td>quality:complete</td>
+</tr>
+<tr>
+<td>product_category</td>
+<td>Governed merchandising category</td>
+<td>TEXT</td>
+<td>Odoo / product master</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Must be in category reference</td>
+<td>domain:product</td>
+<td>quality:conformed</td>
+</tr>
+<tr>
+<td>product_unit</td>
+<td>Canonical quantity unit</td>
+<td>TEXT</td>
+<td>POS Odoo supplier files</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Must map to unit reference</td>
+<td>domain:product</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>product_valid_from</td>
+<td>Start of dimension version</td>
+<td>TIMESTAMPTZ</td>
+<td>Warehouse</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>Less than valid_to</td>
+<td>domain:product</td>
+<td>quality:temporal</td>
+</tr>
+<tr>
+<td>product_valid_to</td>
+<td>End of dimension version nullable</td>
+<td>TIMESTAMPTZ</td>
+<td>Warehouse</td>
+<td>Product owner</td>
+<td>Internal</td>
+<td>One current version per canonical product</td>
+<td>domain:product</td>
+<td>quality:temporal</td>
+</tr>
+<tr>
+<td>store_id</td>
+<td>Warehouse store surrogate key</td>
+<td>BIGINT</td>
+<td>Warehouse</td>
+<td>Store owner</td>
+<td>Internal</td>
+<td>Unique</td>
+<td>domain:store</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>store_code</td>
+<td>Stable business store code</td>
+<td>TEXT</td>
+<td>Odoo / POS</td>
+<td>Store owner</td>
+<td>Internal</td>
+<td>Unique among active stores</td>
+<td>domain:store</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>store_district</td>
+<td>Store district reference</td>
+<td>TEXT</td>
+<td>Store master</td>
+<td>Store owner</td>
+<td>Internal</td>
+<td>Must map to approved district</td>
+<td>domain:store</td>
+<td>quality:conformed</td>
+</tr>
+<tr>
+<td>store_connectivity_status</td>
+<td>Connectivity state at event time</td>
+<td>TEXT</td>
+<td>Store telemetry</td>
+<td>IT lead</td>
+<td>Internal</td>
+<td>Only enumerated states</td>
+<td>domain:store</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>Source order identifier</td>
+<td>TEXT</td>
+<td>POS web</td>
+<td>Sales owner</td>
+<td>Confidential</td>
+<td>Unique by source and store where applicable</td>
+<td>domain:sales</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>order_line_number</td>
+<td>Line ordinal within an order</td>
+<td>INTEGER</td>
+<td>POS web</td>
+<td>Sales owner</td>
+<td>Internal</td>
+<td>Positive integer and stable per order</td>
+<td>domain:sales</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>order_timestamp</td>
+<td>Time order was accepted</td>
+<td>TIMESTAMPTZ</td>
+<td>POS web</td>
+<td>Sales owner</td>
+<td>Confidential</td>
+<td>Timezone known and not future beyond tolerance</td>
+<td>domain:sales</td>
+<td>quality:timely</td>
+</tr>
+<tr>
+<td>quantity</td>
+<td>Units sold or returned</td>
+<td>NUMERIC</td>
+<td>POS web</td>
+<td>Sales owner</td>
+<td>Internal</td>
+<td>Negative only with return/void reason</td>
+<td>domain:sales</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>net_amount</td>
+<td>Net line value in transaction currency</td>
+<td>NUMERIC</td>
+<td>POS web</td>
+<td>Finance owner</td>
+<td>Confidential</td>
+<td>Currency code required; decimal scale validated</td>
+<td>domain:finance</td>
+<td>quality:reconciled</td>
+</tr>
+<tr>
+<td>currency_code</td>
+<td>ISO currency code</td>
+<td>TEXT</td>
+<td>POS web mobile money</td>
+<td>Finance owner</td>
+<td>Internal</td>
+<td>Allowed ISO 4217 code</td>
+<td>domain:finance</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>payment_reference</td>
+<td>Provider/source transaction reference</td>
+<td>TEXT</td>
+<td>POS mobile money</td>
+<td>Finance owner</td>
+<td>Restricted</td>
+<td>Unique or explained duplicate; masked in analytics</td>
+<td>domain:finance</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>supplier_id</td>
+<td>Governed supplier surrogate key</td>
+<td>BIGINT</td>
+<td>Procurement/Odoo</td>
+<td>Procurement owner</td>
+<td>Confidential</td>
+<td>Unique and active flag maintained</td>
+<td>domain:supplier</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>loyalty_account_id</td>
+<td>Source loyalty identifier</td>
+<td>TEXT</td>
+<td>Loyalty app</td>
+<td>Customer owner</td>
+<td>Restricted</td>
+<td>Unique within loyalty source; crosswalk controlled</td>
+<td>domain:loyalty</td>
+<td>quality:unique</td>
+</tr>
+<tr>
+<td>loyalty_points_delta</td>
+<td>Points earned/redeemed/reversed</td>
+<td>INTEGER</td>
+<td>Loyalty app</td>
+<td>Customer owner</td>
+<td>Confidential</td>
+<td>Event type and reason required</td>
+<td>domain:loyalty</td>
+<td>quality:reconciled</td>
+</tr>
+<tr>
+<td>inventory_on_hand</td>
+<td>Counted/book quantity at snapshot</td>
+<td>NUMERIC</td>
+<td>POS/Odoo</td>
+<td>Inventory owner</td>
+<td>Internal</td>
+<td>Snapshot timestamp and unit required</td>
+<td>domain:inventory</td>
+<td>quality:reconciled</td>
+</tr>
+<tr>
+<td>footfall_count</td>
+<td>Aggregated store visitor count</td>
+<td>INTEGER</td>
+<td>Footfall sensors</td>
+<td>Store owner</td>
+<td>Confidential</td>
+<td>Non-negative count; no person identifier</td>
+<td>domain:footfall</td>
+<td>quality:valid</td>
+</tr>
+<tr>
+<td>etl_batch_id</td>
+<td>Identifier for one ingestion batch</td>
+<td>UUID</td>
+<td>Integration platform</td>
+<td>IT lead</td>
+<td>Internal</td>
+<td>Unique and tied to manifest/checksum</td>
+<td>domain:integration</td>
+<td>quality:traceable</td>
+</tr>
+<tr>
+<td>record_loaded_at</td>
+<td>Warehouse ingestion timestamp</td>
+<td>TIMESTAMPTZ</td>
+<td>Warehouse</td>
+<td>IT lead</td>
+<td>Internal</td>
+<td>Server-generated UTC timestamp</td>
+<td>domain:integration</td>
+<td>quality:timely</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>validation rules</h1>
+<table class="register"><thead><tr>
+<th>rule_id</th>
+<th>domain</th>
+<th>rule</th>
+<th>action</th>
+<th>owner</th>
+<th>severity</th>
+</tr></thead><tbody>
+<tr>
+<td>V01</td>
+<td>Customer</td>
+<td>Source system and stable source record ID are required</td>
+<td>Reject online; queue offline with reason</td>
+<td>IT lead</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>V02</td>
+<td>Customer</td>
+<td>Phone is parsed to country-aware canonical form; invalid values are not guessed</td>
+<td>Review queue; preserve source value</td>
+<td>Customer steward</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V03</td>
+<td>Customer</td>
+<td>District maps to the approved district reference</td>
+<td>Review queue; do not auto-correct unknown values</td>
+<td>Customer steward</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>V04</td>
+<td>Customer</td>
+<td>Date formats are source-specific and ambiguous dates are rejected</td>
+<td>Quarantine for source confirmation</td>
+<td>IT lead</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V05</td>
+<td>Customer</td>
+<td>Email syntax and verification state are separate attributes</td>
+<td>Reject invalid syntax; do not infer verified status</td>
+<td>Customer owner</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>V06</td>
+<td>Customer</td>
+<td>Consent or lawful-purpose evidence is recorded per purpose and channel</td>
+<td>Block optional marketing use without approved basis</td>
+<td>Privacy focal</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V07</td>
+<td>Customer</td>
+<td>Identity match requires exact crosswalk or threshold plus independent evidence</td>
+<td>Human review; no destructive automatic merge</td>
+<td>Customer steward</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>V08</td>
+<td>Product</td>
+<td>Canonical SKU resolves to one active product or an approved alias</td>
+<td>Quarantine unresolved SKU</td>
+<td>Product owner</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V09</td>
+<td>Product</td>
+<td>Unit of measure belongs to the approved unit vocabulary</td>
+<td>Reject or steward-map with audit</td>
+<td>Product steward</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V10</td>
+<td>Product</td>
+<td>Category is selected from the current category reference</td>
+<td>Reject unknown code</td>
+<td>Product steward</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>V11</td>
+<td>Sales</td>
+<td>Order ID and line number form a stable idempotency key</td>
+<td>Reject duplicate conflicting payload; retry safely</td>
+<td>IT lead</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>Sales</td>
+<td>Quantity is numeric; negative quantities require a return/void reason</td>
+<td>Quarantine invalid or unexplained negative</td>
+<td>Sales owner</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V13</td>
+<td>Sales</td>
+<td>Currency is an explicit ISO 4217 code and amount has valid precision</td>
+<td>Quarantine unknown currency or malformed amount</td>
+<td>Finance owner</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>V14</td>
+<td>Sales</td>
+<td>Payment reference is unique per provider unless a documented reversal/split explains reuse</td>
+<td>Exception queue and reconcile</td>
+<td>Finance owner</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V15</td>
+<td>Sales</td>
+<td>Order timestamp has a timezone or a documented source timezone</td>
+<td>Quarantine ambiguous timestamps</td>
+<td>Sales owner</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V16</td>
+<td>Inventory</td>
+<td>Stock event carries SKU</td>
+<td>store</td>
+<td>unit</td>
+<td>event ID and source timestamp</td>
+</tr>
+<tr>
+<td>V17</td>
+<td>Inventory</td>
+<td>Inventory adjustment has reason code</td>
+<td>requester and approver</td>
+<td>Block unapproved write</td>
+<td>Inventory owner</td>
+</tr>
+<tr>
+<td>V18</td>
+<td>Supplier</td>
+<td>Incoming workbook has sender</td>
+<td>receipt time</td>
+<td>checksum and approved schema</td>
+<td>Quarantine until procurement steward approves</td>
+</tr>
+<tr>
+<td>V19</td>
+<td>HR</td>
+<td>HR extract includes only approved fields for a named purpose</td>
+<td>Block unapproved columns and recipients</td>
+<td>HR owner</td>
+<td>High</td>
+</tr>
+<tr>
+<td>V20</td>
+<td>Footfall</td>
+<td>Sensor payload contains aggregate counts and no stable person identifier</td>
+<td>Reject identifying payload; escalate to privacy focal</td>
+<td>Store owner</td>
+<td>High</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>compliance register</h1>
+<table class="register"><thead><tr>
+<th>framework</th>
+<th>obligation_area</th>
+<th>reference</th>
+<th>status</th>
+<th>evidence_required</th>
+<th>priority</th>
+<th>owner</th>
+</tr></thead><tbody>
+<tr>
+<td>Uganda Data Protection and Privacy Act 2019</td>
+<td>Registration and accountability</td>
+<td>Act 9 of 2019; exact provisions to be verified against official text</td>
+<td>Not evidenced</td>
+<td>Registration status and controller/processor role records</td>
+<td>Critical</td>
+<td>COO and privacy focal</td>
+</tr>
+<tr>
+<td>Uganda Data Protection and Privacy Act 2019</td>
+<td>Collection notice and lawful processing</td>
+<td>Act 9 of 2019; exact provisions to be verified against official text</td>
+<td>Not evidenced</td>
+<td>Channel notices and purpose/basis records</td>
+<td>High</td>
+<td>Customer owner</td>
+</tr>
+<tr>
+<td>Uganda Data Protection and Privacy Act 2019</td>
+<td>Data subject access/correction/deletion</td>
+<td>Act 9 of 2019; exact provisions to be verified against official text</td>
+<td>Not evidenced</td>
+<td>Request log and tested fulfillment evidence</td>
+<td>High</td>
+<td>Privacy focal</td>
+</tr>
+<tr>
+<td>Uganda Data Protection and Privacy Act 2019</td>
+<td>Security safeguards and breach handling</td>
+<td>Act 9 of 2019; notification duty/deadline to be verified against official text</td>
+<td>Not evidenced</td>
+<td>Incident records</td>
+<td>encryption controls and notification decisions</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Uganda Data Protection and Privacy Act 2019</td>
+<td>Retention and cross-border transfer</td>
+<td>Act 9 of 2019; provisions/mechanism to be verified against official text</td>
+<td>Not evidenced</td>
+<td>Retention schedule and transfer/vendor assessment</td>
+<td>High</td>
+<td>Owners and counsel</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Scope and applicability</td>
+<td>Article 3 (territorial scope)</td>
+<td>Applicability not assessed</td>
+<td>Processing inventory and EU establishment/targeting/monitoring analysis</td>
+<td>High</td>
+<td>Privacy focal and counsel</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Principles and lawful basis</td>
+<td>Articles 5-6</td>
+<td>Applicability/basis not assessed</td>
+<td>Processing inventory and lawful-basis record</td>
+<td>High</td>
+<td>Privacy focal and counsel</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Transparency and data-subject rights</td>
+<td>Articles 12-22</td>
+<td>Not evidenced</td>
+<td>Notices and tested rights workflow</td>
+<td>High</td>
+<td>Customer owner</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Privacy by design and processors</td>
+<td>Articles 25 and 28</td>
+<td>Not evidenced</td>
+<td>Design review and processor agreements</td>
+<td>High</td>
+<td>IT lead and counsel</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>Security and breach notification</td>
+<td>Articles 32-34 (Art. 33: 72 hours where feasible if notification is required; Art. 34: high-risk communication)</td>
+<td>Not evidenced</td>
+<td>Controls and documented threshold/timeline assessment</td>
+<td>Critical</td>
+<td>Controller and privacy focal</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>DPIA</td>
+<td>Article 35</td>
+<td>Draft only</td>
+<td>Approved DPIA and residual-risk decision</td>
+<td>High</td>
+<td>Controller and privacy focal</td>
+</tr>
+<tr>
+<td>GDPR</td>
+<td>International transfers</td>
+<td>Articles 44-49</td>
+<td>Not assessed</td>
+<td>Transfer map and applicable mechanism/legal review</td>
+<td>High</td>
+<td>Controller and counsel</td>
+</tr>
+<tr>
+<td>CCPA/CPRA</td>
+<td>Consumer rights and disclosures</td>
+<td>Applicability must be assessed; comparative reference only</td>
+<td>Not assessed</td>
+<td>California nexus and threshold analysis before implementation</td>
+<td>Low</td>
+<td>Privacy focal and counsel</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>access control matrix</h1>
+<table class="register"><thead><tr>
+<th>role</th>
+<th>data_object</th>
+<th>read</th>
+<th>insert</th>
+<th>update</th>
+<th>delete</th>
+<th>conditions</th>
+</tr></thead><tbody>
+<tr>
+<td>POS service</td>
+<td>Store transactions</td>
+<td>Own-store rows</td>
+<td>Own-store rows</td>
+<td>Own-store pending rows</td>
+<td>No</td>
+<td>Device identity; queued writes use idempotency key</td>
+</tr>
+<tr>
+<td>Store cashier</td>
+<td>Customer signup</td>
+<td>Limited signup fields</td>
+<td>Own-store provisional records</td>
+<td>Own provisional records</td>
+<td>No</td>
+<td>No full customer-history lookup</td>
+</tr>
+<tr>
+<td>Customer steward</td>
+<td>Customer crosswalk</td>
+<td>Yes</td>
+<td>Reviewed links</td>
+<td>Review status and attributes</td>
+<td>No</td>
+<td>No unrestricted contact export</td>
+</tr>
+<tr>
+<td>Product steward</td>
+<td>Product master and aliases</td>
+<td>Yes</td>
+<td>Approved aliases</td>
+<td>Approved attributes</td>
+<td>No</td>
+<td>Change reason and audit required</td>
+</tr>
+<tr>
+<td>Finance analyst</td>
+<td>Payments and reconciliation</td>
+<td>Masked/reference-limited</td>
+<td>No</td>
+<td>Reconciliation status only</td>
+<td>No</td>
+<td>Provider reference masked unless approved exception</td>
+</tr>
+<tr>
+<td>Analytics analyst</td>
+<td>Warehouse facts and dimensions</td>
+<td>Aggregates/masked views</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No restricted contact or HR schema</td>
+</tr>
+<tr>
+<td>HR officer</td>
+<td>HR source data</td>
+<td>Assigned HR records</td>
+<td>Approved workforce changes</td>
+<td>Assigned HR records</td>
+<td>No</td>
+<td>Need-to-know; restricted fields separately granted</td>
+</tr>
+<tr>
+<td>ETL service</td>
+<td>Staging and warehouse</td>
+<td>Required batch scope</td>
+<td>Required batch scope</td>
+<td>Idempotent ETL scope</td>
+<td>Quarantine by process</td>
+<td>Non-interactive identity; rotated secret; logged batch IDs</td>
+</tr>
+<tr>
+<td>IT administrator</td>
+<td>Platform metadata and logs</td>
+<td>Operational access</td>
+<td>No routine business writes</td>
+<td>Privileged maintenance</td>
+<td>No business-record deletion</td>
+<td>Just-in-time privilege; MFA; session log</td>
+</tr>
+<tr>
+<td>Privacy focal</td>
+<td>Request and incident registers</td>
+<td>Case-limited</td>
+<td>Case records</td>
+<td>Case status and evidence</td>
+<td>No</td>
+<td>No standing raw-data access unless approved</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>etl vs elt</h1>
+<table class="register"><thead><tr>
+<th>criterion</th>
+<th>weight</th>
+<th>ETL_score_1_to_5</th>
+<th>ELT_score_1_to_5</th>
+<th>SRG_decision</th>
+</tr></thead><tbody>
+<tr>
+<td>Latency</td>
+<td>20</td>
+<td>3</td>
+<td>4</td>
+<td>Daily batch first; only selected operational alerts justify streaming</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>25</td>
+<td>4</td>
+<td>2</td>
+<td>ETL on a small managed relational platform has lower initial operating burden</td>
+</tr>
+<tr>
+<td>Scalability</td>
+<td>15</td>
+<td>3</td>
+<td>5</td>
+<td>ELT scales better after platform and workload growth</td>
+</tr>
+<tr>
+<td>Complexity_and_skills</td>
+<td>25</td>
+<td>4</td>
+<td>2</td>
+<td>Two SQL-capable IT staff and no data-engineering experience favor controlled transforms</td>
+</tr>
+<tr>
+<td>Governance_and_security</td>
+<td>15</td>
+<td>4</td>
+<td>3</td>
+<td>Validate/minimize before broad warehouse availability; raw zone still possible later</td>
+</tr>
+<tr>
+<td>Weighted_score_out_of_5</td>
+<td>100</td>
+<td>3.65</td>
+<td>3.00</td>
+<td>Start ETL; revisit after skills</td>
+</tr>
+</tbody></table></section>
+<section class="appendix"><h1>catalog tool evaluation</h1>
+<table class="register"><thead><tr>
+<th>criterion</th>
+<th>weight</th>
+<th>OpenMetadata_score_1_to_5</th>
+<th>Microsoft_Purview_score_1_to_5</th>
+<th>evidence_needed</th>
+</tr></thead><tbody>
+<tr>
+<td>Annual total cost</td>
+<td>25</td>
+<td>4</td>
+<td>2</td>
+<td>Collect current license/support and implementation quotes</td>
+</tr>
+<tr>
+<td>Operations effort</td>
+<td>20</td>
+<td>2</td>
+<td>5</td>
+<td>Time-boxed pilot with IT availability and upgrade tests</td>
+</tr>
+<tr>
+<td>Lineage and glossary</td>
+<td>20</td>
+<td>4</td>
+<td>4</td>
+<td>Demonstrate PostgreSQL</td>
+</tr>
+<tr>
+<td>Access control and audit</td>
+<td>15</td>
+<td>3</td>
+<td>4</td>
+<td>Test SSO</td>
+</tr>
+<tr>
+<td>Portability</td>
+<td>10</td>
+<td>5</td>
+<td>2</td>
+<td>Export glossary</td>
+</tr>
+<tr>
+<td>Uganda/EU hosting and support</td>
+<td>10</td>
+<td>3</td>
+<td>4</td>
+<td>Verify regions</td>
+</tr>
+<tr>
+<td>Weighted_score_out_of_5</td>
+<td>100</td>
+<td>3.45</td>
+<td>3.50</td>
+<td>Provisional tie: choose a lightweight catalog only after pilot TCO and skills assessment</td>
+</tr>
+</tbody></table></section>
+<footer>Project Savanna EDM portfolio â€¢ AI-assisted working draft â€¢ synthetic test evidence only</footer></body></html>

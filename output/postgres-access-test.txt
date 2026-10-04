@@ -1,0 +1,17 @@
+﻿Synthetic demo RBAC verification
+srg_analytics SELECT on warehouse.customer_masked_v: allowed
+srg_analytics SELECT on core.customer_contact_restricted: denied as expected
+
+SET
+ masked_view_rows 
+------------------
+                0
+(1 row)
+
+RESET
+
+SET
+psql:C:/Users/Nana/Desktop/SRG/output/assert-restricted-access.sql:1: ERROR:  permission denied for schema core
+LINE 1: SELECT * FROM core.customer_contact_restricted LIMIT 1;
+                      ^
+

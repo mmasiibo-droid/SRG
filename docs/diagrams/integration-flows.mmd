@@ -1,0 +1,19 @@
+flowchart LR
+  POS[Store POS / offline queue]
+  WEB[Web and CRM]
+  LOY[Loyalty source]
+  ODOO[Odoo / supplier intake]
+  HUB[Authenticated integration hub]
+  XW[ID and product crosswalks]
+  OWN[Customer/product stewards]
+  CORE[Operational golden IDs plus source links]
+  DW[Warehouse]
+  POS -->|signed event, replayable| HUB
+  WEB --> HUB
+  LOY --> HUB
+  ODOO --> HUB
+  HUB --> XW --> CORE
+  XW -->|ambiguous candidates| OWN
+  OWN -->|approved / rejected with audit| XW
+  CORE --> DW
+  DW -->|masked aggregates| BI[Role-filtered reporting]

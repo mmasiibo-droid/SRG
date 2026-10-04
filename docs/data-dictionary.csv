@@ -1,0 +1,39 @@
+element,business_definition,technical_type,source,owner,sensitivity,quality_rule,domain_tag,quality_tag
+source_system_id,Identifier assigned by the originating system,TEXT,All source systems,Domain owner,Confidential,Not null with source_system,domain:shared,quality:required
+source_record_id,Stable primary key in a source,TEXT,Source extract,Domain owner,Confidential,Unique within source_system_id,domain:shared,quality:unique
+golden_customer_id,Hub-assigned non-semantic customer key,UUID,Customer MDM,Customer owner,Confidential,Unique and never reused,domain:customer,quality:unique
+customer_name,Customer display name,TEXT,POS web CRM loyalty,Customer owner,Restricted,Trimmed; provenance retained; no unsupported rewrite,domain:customer,quality:standardized
+customer_phone_e164,Normalized phone where valid,TEXT,POS web CRM loyalty,Customer owner,Restricted,Canonical format or null with reason,domain:customer,quality:valid
+customer_email_normalized,Lower-case normalized email,TEXT,Web CRM loyalty,Customer owner,Restricted,Syntax check; verification state separate,domain:customer,quality:valid
+customer_district,District from governed reference,TEXT,POS web loyalty,Customer owner,Confidential,Must map to approved code or pending-review,domain:customer,quality:conformed
+customer_address_line,Address text with access restriction,TEXT,CRM web,Customer owner,Restricted,Effective-dated; minimize; retain source history,domain:customer,quality:reviewed
+customer_created_at,Source creation timestamp,TIMESTAMPTZ,Source systems,Customer owner,Confidential,Timezone and source system recorded,domain:customer,quality:timely
+consent_status,Purpose-specific consent/legal-basis state,TEXT,Web loyalty CRM,Privacy focal,Restricted,Allowed state and evidence reference required,domain:customer,quality:traceable
+marketing_preference,Channel-specific opt-in/out,TEXT,CRM loyalty,Customer owner,Restricted,Latest verified event wins; keep event history,domain:customer,quality:current
+match_confidence,Reviewed match score or confidence,TEXT,MDM service,Customer steward,Restricted,Algorithm/rule version recorded; not treated as proof,domain:customer,quality:traceable
+product_id,Warehouse product surrogate key,BIGINT,Warehouse,Product owner,Internal,Unique,domain:product,quality:unique
+source_sku,SKU as delivered by source,TEXT,POS Odoo supplier files,Product owner,Confidential,Preserve exact source value,domain:product,quality:traceable
+canonical_sku,Governed cross-source product key,TEXT,Product crosswalk,Product owner,Internal,Unique when active; alias mapping audited,domain:product,quality:unique
+product_name,Approved product display name,TEXT,Odoo procurement POS,Product owner,Internal,Non-empty and steward-reviewed,domain:product,quality:complete
+product_category,Governed merchandising category,TEXT,Odoo / product master,Product owner,Internal,Must be in category reference,domain:product,quality:conformed
+product_unit,Canonical quantity unit,TEXT,POS Odoo supplier files,Product owner,Internal,Must map to unit reference,domain:product,quality:valid
+product_valid_from,Start of dimension version,TIMESTAMPTZ,Warehouse,Product owner,Internal,Less than valid_to,domain:product,quality:temporal
+product_valid_to,End of dimension version nullable,TIMESTAMPTZ,Warehouse,Product owner,Internal,One current version per canonical product,domain:product,quality:temporal
+store_id,Warehouse store surrogate key,BIGINT,Warehouse,Store owner,Internal,Unique,domain:store,quality:unique
+store_code,Stable business store code,TEXT,Odoo / POS,Store owner,Internal,Unique among active stores,domain:store,quality:unique
+store_district,Store district reference,TEXT,Store master,Store owner,Internal,Must map to approved district,domain:store,quality:conformed
+store_connectivity_status,Connectivity state at event time,TEXT,Store telemetry,IT lead,Internal,Only enumerated states,domain:store,quality:valid
+order_id,Source order identifier,TEXT,POS web,Sales owner,Confidential,Unique by source and store where applicable,domain:sales,quality:unique
+order_line_number,Line ordinal within an order,INTEGER,POS web,Sales owner,Internal,Positive integer and stable per order,domain:sales,quality:valid
+order_timestamp,Time order was accepted,TIMESTAMPTZ,POS web,Sales owner,Confidential,Timezone known and not future beyond tolerance,domain:sales,quality:timely
+quantity,Units sold or returned,NUMERIC,POS web,Sales owner,Internal,Negative only with return/void reason,domain:sales,quality:valid
+net_amount,Net line value in transaction currency,NUMERIC,POS web,Finance owner,Confidential,Currency code required; decimal scale validated,domain:finance,quality:reconciled
+currency_code,ISO currency code,TEXT,POS web mobile money,Finance owner,Internal,Allowed ISO 4217 code,domain:finance,quality:valid
+payment_reference,Provider/source transaction reference,TEXT,POS mobile money,Finance owner,Restricted,Unique or explained duplicate; masked in analytics,domain:finance,quality:unique
+supplier_id,Governed supplier surrogate key,BIGINT,Procurement/Odoo,Procurement owner,Confidential,Unique and active flag maintained,domain:supplier,quality:unique
+loyalty_account_id,Source loyalty identifier,TEXT,Loyalty app,Customer owner,Restricted,Unique within loyalty source; crosswalk controlled,domain:loyalty,quality:unique
+loyalty_points_delta,Points earned/redeemed/reversed,INTEGER,Loyalty app,Customer owner,Confidential,Event type and reason required,domain:loyalty,quality:reconciled
+inventory_on_hand,Counted/book quantity at snapshot,NUMERIC,POS/Odoo,Inventory owner,Internal,Snapshot timestamp and unit required,domain:inventory,quality:reconciled
+footfall_count,Aggregated store visitor count,INTEGER,Footfall sensors,Store owner,Confidential,Non-negative count; no person identifier,domain:footfall,quality:valid
+etl_batch_id,Identifier for one ingestion batch,UUID,Integration platform,IT lead,Internal,Unique and tied to manifest/checksum,domain:integration,quality:traceable
+record_loaded_at,Warehouse ingestion timestamp,TIMESTAMPTZ,Warehouse,IT lead,Internal,Server-generated UTC timestamp,domain:integration,quality:timely

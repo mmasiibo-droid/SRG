@@ -1,0 +1,14 @@
+framework,obligation_area,reference,status,evidence_required,priority,owner
+Uganda Data Protection and Privacy Act 2019,Registration and accountability,Act 9 of 2019; exact provisions to be verified against official text,Not evidenced,Registration status and controller/processor role records,Critical,COO and privacy focal
+Uganda Data Protection and Privacy Act 2019,Collection notice and lawful processing,Act 9 of 2019; exact provisions to be verified against official text,Not evidenced,Channel notices and purpose/basis records,High,Customer owner
+Uganda Data Protection and Privacy Act 2019,Data subject access/correction/deletion,Act 9 of 2019; exact provisions to be verified against official text,Not evidenced,Request log and tested fulfillment evidence,High,Privacy focal
+Uganda Data Protection and Privacy Act 2019,Security safeguards and breach handling,Act 9 of 2019; notification duty/deadline to be verified against official text,Not evidenced,Incident records, encryption controls and notification decisions,Critical,IT lead and privacy focal
+Uganda Data Protection and Privacy Act 2019,Retention and cross-border transfer,Act 9 of 2019; provisions/mechanism to be verified against official text,Not evidenced,Retention schedule and transfer/vendor assessment,High,Owners and counsel
+GDPR,Scope and applicability,Article 3 (territorial scope),Applicability not assessed,Processing inventory and EU establishment/targeting/monitoring analysis,High,Privacy focal and counsel
+GDPR,Principles and lawful basis,Articles 5-6,Applicability/basis not assessed,Processing inventory and lawful-basis record,High,Privacy focal and counsel
+GDPR,Transparency and data-subject rights,Articles 12-22,Not evidenced,Notices and tested rights workflow,High,Customer owner
+GDPR,Privacy by design and processors,Articles 25 and 28,Not evidenced,Design review and processor agreements,High,IT lead and counsel
+GDPR,Security and breach notification,Articles 32-34 (Art. 33: 72 hours where feasible if notification is required; Art. 34: high-risk communication),Not evidenced,Controls and documented threshold/timeline assessment,Critical,Controller and privacy focal
+GDPR,DPIA,Article 35,Draft only,Approved DPIA and residual-risk decision,High,Controller and privacy focal
+GDPR,International transfers,Articles 44-49,Not assessed,Transfer map and applicable mechanism/legal review,High,Controller and counsel
+CCPA/CPRA,Consumer rights and disclosures,Applicability must be assessed; comparative reference only,Not assessed,California nexus and threshold analysis before implementation,Low,Privacy focal and counsel

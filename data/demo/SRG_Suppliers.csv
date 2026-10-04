@@ -1,0 +1,3 @@
+supplier_id,supplier_name,supplier_sku,canonical_sku,unit,pack_size
+SUP01,Demo Foods Ltd,GF-101,SNK-001,Kilograms,1
+SUP02,Demo Drinks Co,JU-200,DRK-002,L,1

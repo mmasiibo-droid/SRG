@@ -1,0 +1,9 @@
+customer_id,full_name,phone,email,district,created_date,marketing_opt_in
+C001,Amina N Mukasa,0772 123 456,amina@example.com,Kampala,2026-01-03,true
+C002,Amina N. Mukasa,+256772123456,amina@example.com,KLA,03/01/2026,true
+C003,Peter Okello,0700-555-012,peter@example.com,Gulu,2026-01-10,false
+C004,Grace Namara,not-a-phone,grace@example.com,Jinja,2026/02/11,false
+C005,Daniel Kato,,daniel@example.com,Mbarara,2026-02-14,true
+C006,Sample Person Six,0755 000 006,six@example.com,Unknown District,14-02-2026,false
+C007,Sample Person Seven,0755 000 007,seven@example.com,Kampala,2026-03-01,true
+C008,Sample Person Eight,+256755000008,eight@example.com,Jinja,2026-03-03,false

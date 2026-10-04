@@ -1,0 +1,13 @@
+id,threat,vulnerability,likelihood_1_5,impact_1_5,inherent_score,mitigation,owner,residual_likelihood,residual_impact
+R01,Lost or stolen endpoint exposes customer exports,Local unencrypted exports; delayed report,4,5,20,Full disk encryption; block exports; MFA; remote revoke; incident drill,IT lead / COO,2,4
+R02,Insider bulk extraction,Excess access and no monitoring,3,5,15,Least privilege; export approvals; DLP/log review; sanctions and training,IT lead,2,4
+R03,Credential phishing leads to CRM/loyalty access,Weak MFA or reused credentials,4,4,16,MFA; phishing-resistant admin auth; conditional access; recovery testing,IT lead,2,4
+R04,Ransomware disrupts store and HQ operations,Unpatched systems and recoverability gaps,3,5,15,Patch SLAs; segmented backups; offline restore tests; incident playbook,IT lead,2,4
+R05,Wrong customer records merged,Ambiguous identifiers and unsafe auto-merge,4,4,16,Conservative rules; review queue; reversibility; rights-aware audit,Customer owner,2,3
+R06,Offline sync replays transaction twice,Missing idempotency keys or conflict policy,4,4,16,UUID/source sequence; idempotent load; reconciliation; dead-letter queue,IT lead,2,3
+R07,Vendor compromise or misuse,Weak processor due diligence and contracts,3,5,15,Security review; DPA; subprocessor and incident clauses; access review,COO / privacy,2,4
+R08,HR/payroll spreadsheet is exposed,Over-shared workbooks and sensitive fields,3,5,15,Inventory/minimize fields; restricted encrypted transfer; named access; delete copies,HR owner,2,4
+R09,Payment reconciliation fraud is missed,Manual CSV delays and inconsistent reference IDs,3,4,12,Daily dual control; duplicate/refund rules; exception escalation,Finance owner,2,3
+R10,Footfall data enables surveillance,Person-level or linkable sensor payload,2,5,10,Aggregate-only payload; DPIA; short approved retention; no identity join,Store owner / privacy,1,4
+R11,Cloud transfer violates locality/transfer duties,Unreviewed regions and subprocessors,2,5,10,Transfer impact review; approved regions; contract controls; legal gate,COO / counsel,1,4
+R12,Service outage or power interruption causes data loss,Store connectivity and backup-power constraints,4,4,16,Offline queue; UPS; signed replay; recovery targets and restore drills,IT lead / Retail Ops,2,3

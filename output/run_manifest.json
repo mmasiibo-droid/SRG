@@ -1,0 +1,12 @@
+﻿{
+    "generated_at_utc":  "2026-10-04T03:35:28.3917460Z",
+    "evidence_label":  "Synthetic demo only unless inputs have independently been authorized and verified",
+    "input_directory":  "C:\\Users\\Nana\\Desktop\\SRG\\data\\demo",
+    "customer_rows":  8,
+    "product_rows":  6,
+    "sales_rows":  8,
+    "sales_rows_accepted":  7,
+    "sales_rows_quarantined":  1,
+    "duplicate_customer_candidates":  1,
+    "product_duplicate_candidate_rows":  1
+}

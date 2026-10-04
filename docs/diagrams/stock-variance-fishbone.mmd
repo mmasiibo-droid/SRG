@@ -1,0 +1,18 @@
+flowchart LR
+  V([Book vs physical stock variance])
+  P[Process: receiving not posted on time]
+  R[Process: returns/voids not reconciled]
+  C[Connectivity: delayed or duplicated offline sync]
+  U[Master data: pack-size/unit conversion mismatch]
+  H[People: rushed counts or training gaps]
+  T[Timing: count and ledger snapshots differ]
+  S[System: store and HQ stock movements not integrated]
+  F[Fraud/shrink: unrecorded loss or damage]
+  P --> V
+  R --> V
+  C --> V
+  U --> V
+  H --> V
+  T --> V
+  S --> V
+  F --> V

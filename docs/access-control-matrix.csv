@@ -1,0 +1,11 @@
+role,data_object,read,insert,update,delete,conditions
+POS service,Store transactions,Own-store rows,Own-store rows,Own-store pending rows,No,Device identity; queued writes use idempotency key
+Store cashier,Customer signup,Limited signup fields,Own-store provisional records,Own provisional records,No,No full customer-history lookup
+Customer steward,Customer crosswalk,Yes,Reviewed links,Review status and attributes,No,No unrestricted contact export
+Product steward,Product master and aliases,Yes,Approved aliases,Approved attributes,No,Change reason and audit required
+Finance analyst,Payments and reconciliation,Masked/reference-limited,No,Reconciliation status only,No,Provider reference masked unless approved exception
+Analytics analyst,Warehouse facts and dimensions,Aggregates/masked views,No,No,No,No restricted contact or HR schema
+HR officer,HR source data,Assigned HR records,Approved workforce changes,Assigned HR records,No,Need-to-know; restricted fields separately granted
+ETL service,Staging and warehouse,Required batch scope,Required batch scope,Idempotent ETL scope,Quarantine by process,Non-interactive identity; rotated secret; logged batch IDs
+IT administrator,Platform metadata and logs,Operational access,No routine business writes,Privileged maintenance,No business-record deletion,Just-in-time privilege; MFA; session log
+Privacy focal,Request and incident registers,Case-limited,Case records,Case status and evidence,No,No standing raw-data access unless approved

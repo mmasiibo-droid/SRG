@@ -1,0 +1,2 @@
+employee_id,department,work_email,phone,pay_band,bank_account,health_note
+DEMO-001,IT,employee1@example.com,0000000000,DEMO-ONLY,NOT-A-REAL-ACCOUNT,synthetic fixture

@@ -1,0 +1,7 @@
+﻿"sku_source","canonical_sku","product_name","category_source","category_canonical","unit_source","unit_canonical","unit_price","duplicate_sku_candidate","data_quality_action"
+"SNK-001","SNK-001","Roasted groundnuts","Snacks","Snacks","kg","kg","4500","False","Standardized; inspect duplicate SKU candidates"
+"snk-001","SNK-001","Roasted groundnuts","Snacks","Snacks","Kilograms","kg","4500","True","Standardized; inspect duplicate SKU candidates"
+"DRK-002","DRK-002","Passion juice","Beverages","Beverages","Litre","L","3200","False","Standardized; inspect duplicate SKU candidates"
+"DRK-003","DRK-003","Mango juice","Bevrages","Beverages","lt","L","3000","False","Standardized; inspect duplicate SKU candidates"
+"HOM-004","HOM-004","Sample storage basket","Household","Household","Each","each","12000","False","Standardized; inspect duplicate SKU candidates"
+"GRN-005","GRN-005","Green beans","Produce","Produce","KGS","kg","2500","False","Standardized; inspect duplicate SKU candidates"

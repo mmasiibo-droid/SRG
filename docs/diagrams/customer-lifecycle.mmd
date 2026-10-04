@@ -1,0 +1,28 @@
+flowchart LR
+  subgraph Create[Creation and collection]
+    POS[POS signup / cashier]
+    WEB[SavannaShop checkout]
+    LOY[Loyalty app registration]
+    MM[Mobile-money linkage]
+  end
+  POS --> V[Channel validation and notice]
+  WEB --> V
+  LOY --> V
+  MM --> V
+  V -->|online| SRC[Local source database]
+  V -->|offline| Q[Signed local queue with event ID]
+  Q -->|reconnect, idempotent replay| SRC
+  SRC --> HUB[Integration hub and source crosswalk]
+  HUB --> REVIEW[Customer steward match review]
+  REVIEW --> GOLD[Golden ID plus provenance]
+  GOLD --> USE[Purpose-limited CRM / loyalty / analytics]
+  USE --> SHARE[Approved processor or partner share]
+  USE --> ARCH[Restricted archive per approved schedule]
+  SHARE --> LOG[Access and transfer log]
+  ARCH --> DEL[Verified deletion / legal hold]
+  DEL --> EVID[Deletion receipt and audit record]
+  V -. failure: invalid or duplicate signup .-> EX[Exception queue and store steward]
+  HUB -. failure: false merge .-> UNMERGE[Reversible link / rights review]
+  SHARE -. failure: uncontrolled export .-> INCIDENT[Incident response]
+  classDef failure fill:#fff1f0,stroke:#bd2c00,color:#111
+  class EX,UNMERGE,INCIDENT failure

@@ -1,0 +1,1 @@
+\copy staging.sales_line (batch_id, source_system, source_order_id, source_line_number, source_customer_id, source_sku, source_store_code, order_timestamp_raw, quantity_raw, unit_price_raw, currency_raw, payment_reference_raw, channel_raw, return_reason_raw) FROM 'staging_sales.csv' WITH (FORMAT csv, HEADER true)

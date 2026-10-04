@@ -1,0 +1,17 @@
+flowchart LR
+  SRC[POS / web / loyalty / Odoo / supplier / payment]
+  MAN[Source manifest: owner, hash, schema, watermark]
+  LAND[Encrypted immutable landing / offline replay]
+  VAL[Schema, type, key, totals validation]
+  Q{Valid?}
+  ERR[Quarantine with row and reason]
+  STG[Staging with source IDs and batch ID]
+  XW[Reference crosswalk and reviewed MDM]
+  DIM[Load conformed dimensions; Type 2 history]
+  FACT[Load idempotent facts]
+  REC[Reconcile counts and control totals]
+  BI[Masked semantic model and dashboard]
+  SRC --> MAN --> LAND --> VAL --> Q
+  Q -->|No| ERR
+  Q -->|Yes| STG --> XW --> DIM --> FACT --> REC --> BI
+  REC -->|Mismatch| ERR

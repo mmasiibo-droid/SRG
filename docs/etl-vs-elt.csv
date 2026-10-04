@@ -1,0 +1,7 @@
+criterion,weight,ETL_score_1_to_5,ELT_score_1_to_5,SRG_decision
+Latency,20,3,4,Daily batch first; only selected operational alerts justify streaming
+Cost,25,4,2,ETL on a small managed relational platform has lower initial operating burden
+Scalability,15,3,5,ELT scales better after platform and workload growth
+Complexity_and_skills,25,4,2,Two SQL-capable IT staff and no data-engineering experience favor controlled transforms
+Governance_and_security,15,4,3,Validate/minimize before broad warehouse availability; raw zone still possible later
+Weighted_score_out_of_5,100,3.65,3.00,Start ETL; revisit after skills, workload, and cloud total-cost evidence

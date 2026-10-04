@@ -1,0 +1,26 @@
+flowchart TB
+  subgraph Edge[Stores and channels, tolerate outages]
+    POS[23 POS MySQL sources]
+    WEB[Shop PostgreSQL]
+    CRM[CRM SaaS]
+    LOY[Loyalty app]
+    ERP[Odoo and governed supplier intake]
+    PAY[Mobile money files / APIs]
+    BUF[Store queue, encryption, idempotency]
+    POS --> BUF
+  end
+  BUF -->|reconnect and replay| HUB
+  WEB --> HUB
+  CRM --> HUB
+  LOY --> HUB
+  ERP --> HUB
+  PAY -->|daily batch| HUB
+  HUB[Integration hub and MDM crosswalk]
+  HUB --> DW[Governed warehouse]
+  DW --> BI[Masked BI semantic layer]
+  SENSOR[Footfall aggregate stream] -->|DPIA-gated| BROKER[Small authenticated broker]
+  BROKER --> LIVE[Coarse occupancy / queue signal]
+  GOV[Data council, owners, stewards, privacy] -. controls .-> HUB
+  GOV -. policies .-> DW
+  SEC[Identity, encryption, audit, backup] -. wraps .-> HUB
+  SEC -. wraps .-> DW

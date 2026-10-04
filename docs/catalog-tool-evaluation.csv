@@ -1,0 +1,8 @@
+criterion,weight,OpenMetadata_score_1_to_5,Microsoft_Purview_score_1_to_5,evidence_needed
+Annual total cost,25,4,2,Collect current license/support and implementation quotes
+Operations effort,20,2,5,Time-boxed pilot with IT availability and upgrade tests
+Lineage and glossary,20,4,4,Demonstrate PostgreSQL, scheduled ETL, dashboards and spreadsheet lineage
+Access control and audit,15,3,4,Test SSO, role mapping, audit export, restricted metadata handling
+Portability,10,5,2,Export glossary, tags, lineage and ownership without vendor lock-in
+Uganda/EU hosting and support,10,3,4,Verify regions, subprocessors, residency, support terms and transfer safeguards
+Weighted_score_out_of_5,100,3.45,3.50,Provisional tie: choose a lightweight catalog only after pilot TCO and skills assessment

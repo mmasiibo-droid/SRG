@@ -1,0 +1,60 @@
+﻿PostgreSQL client: psql (PostgreSQL) 17.11
+Database: savanna_edm_demo at localhost:5432
+Evidence: synthetic fixture records only
+===== Synthetic dimension seed (exit 0) =====
+BEGIN
+DELETE 7
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+COMMIT
+
+===== Staging CSV load (exit 0) =====
+COPY 7
+
+===== ETL first pass (exit 0) =====
+BEGIN
+SELECT 7
+ batch_id | source_system | source_order_id | source_line_number | source_customer_id | source_sku | source_store_code | order_timestamp_raw | quantity_raw | unit_price_raw | currency_raw | payment_reference_raw | channel_raw | return_reason_raw | landed_at 
+----------+---------------+-----------------+--------------------+--------------------+------------+-------------------+---------------------+--------------+----------------+--------------+-----------------------+-------------+-------------------+-----------
+(0 rows)
+
+INSERT 0 7
+COMMIT
+
+===== ETL idempotency replay (exit 0) =====
+BEGIN
+SELECT 7
+ batch_id | source_system | source_order_id | source_line_number | source_customer_id | source_sku | source_store_code | order_timestamp_raw | quantity_raw | unit_price_raw | currency_raw | payment_reference_raw | channel_raw | return_reason_raw | landed_at 
+----------+---------------+-----------------+--------------------+--------------------+------------+-------------------+---------------------+--------------+----------------+--------------+-----------------------+-------------+-------------------+-----------
+(0 rows)
+
+INSERT 0 7
+COMMIT
+
+===== ETL assertions (exit 0) =====
+DO
+          check_name           | result 
+-------------------------------+--------
+ synthetic sales fact rows     |      7
+ ambiguous-date P002 fact rows |      0
+ negative return rows          |      1
+(3 rows)
+
+
+===== Analytics masked-view access (exit 0) =====
+SET
+ masked_view_rows 
+------------------
+                0
+(1 row)
+
+RESET
+
+===== Analytics restricted-table denial (exit 3) =====
+SET
+psql:C:/Users/Nana/Desktop/SRG/output/assert-restricted-access.sql:1: ERROR:  permission denied for schema core
+LINE 1: SELECT * FROM core.customer_contact_restricted LIMIT 1;
+                      ^
+

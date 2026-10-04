@@ -1,0 +1,23 @@
+id,assumption,reason,owner,validation,review_by,status
+A01,Store POS databases support a repeatable read-only export,Needed for incremental/batch integration,IT lead,Test two-store connector and outage replay,M3,Unverified
+A02,Each source can expose a stable source record ID,Needed for crosswalk and idempotency,IT lead,Inventory source schemas and collision rates,M2,Unverified
+A03,Stores must continue checkout during connectivity outages,Operational constraint in brief,Retail Operations,Confirm maximum offline duration and recovery targets,M2,Scenario fact
+A04,Household members may share phone numbers,Prevents unsafe phone-only identity merge,Customer owner,Review sample and store practices,M3,Unverified
+A05,Customer consent and marketing preferences are not consistent across channels,Reported siloed channels,Privacy focal person,Inspect notices and event logs,M2,Unverified
+A06,Current annual EDM/data budget ceiling is UGX 480 million,Scenario constraint,CFO,Confirm tax and recurring cost treatment,M1,Scenario fact
+A07,IT has four staff and two SQL-capable staff,Scenario constraint,IT lead,Confirm allocation and availability,M1,Scenario fact
+A08,Named district reference list can be obtained from business owners,Needed for valid district checks,Customer owner,Approve maintained canonical list,M2,Unverified
+A09,All source currencies can be identified from source fields or contract,Needed to normalize amounts,Finance owner,Map currency per source and transaction,M2,Unverified
+A10,Footfall stream can be configured to emit non-identifying counts only,Privacy-by-design condition,Store Operations,Inspect payload and sensor settings before pilot,M3,Unverified
+A11,The stolen laptop incident has not yet been fully assessed,Brief says notification was not made,COO and privacy focal,Preserve records and obtain counsel review,Immediate,Unverified
+A12,The provided unnormalized extract has repeating line/payment groups,Illustrative normalization scenario only,Finance owner,Inspect original extract columns,Before final report,Unverified
+A13,User-provided demo data are synthetic and have no real data subjects,Fixtures are made-up test records,Project maintainer,Check fixtures before commit/release,Every change,Validated
+A14,Cloud/BI vendor pricing is unknown,No quotations were provided,CFO and IT lead,Collect total-cost-of-ownership quotes,M5,Unverified
+A15,The GDPR applies only where territorial/material scope tests are met,EU partnership alone is not sufficient proof,Privacy focal and counsel,Map establishment/targeting/data subjects,Before EU rollout,Legal review required
+A16,The files currently under data/demo are the complete files available in this workspace for this execution,User explicitly instructs treating the workspace dataset as complete,Project maintainer,Inventory all workspace files and hashes; compare only when an additional course file is supplied,This run,Accepted scope assumption
+A17,The available customer/product/sales/supplier/loyalty/HR/footfall rows are synthetic test fixtures and not measured SRG observations,The data/demo/README.md explicitly says every value is fabricated,Project maintainer,Preserve fixture provenance and label all metrics/dashboard output as workspace synthetic fixtures,Every report,Confirmed by fixture documentation
+A18,No ETL error log is available,Workspace inventory contains no etl_error_log.txt; successful test transcript is not the broken assignment log,IT lead,Re-run log diagnosis if the missing log is later supplied; never infer a specific exception,This run,Not present; diagnosis not evidenced
+A19,SRG_HR_SAMPLE.csv is a schema illustration and not the assignment workbook,One demo row uses obvious fake values; SRG_HR.xlsx not present,HR owner,Review the actual workbook if supplied and classify every field before loading,This run,Accepted technical limitation
+A20,Small fixture counts cannot support scenario-scale estimates or production thresholds,Current files contain 8 customers/6 products/8 sales rather than scenario quantities,Data owners,Recompute statistics with authorized scenario-scale records and confidence checks,Before claiming SRG findings,Confirmed from inventory
+A21,Ambiguous dates are rejected instead of locale-guessed,Fixture contains slash date where day and month are both <= 12,Finance/data steward,Confirm source export locale and date contract,Before production ETL,Applied conservative rule
+A22,Only three-letter currency syntax is validated in demo profiling,Fixture contains UGX but no ISO reference,Finance owner,Validate against ISO 4217 reference and reconcile provider settlement totals,Before production ETL,Applied syntax-only check

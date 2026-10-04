@@ -1,0 +1,4 @@
+loyalty_account_id,customer_id,points_balance,marketing_opt_in
+L001,C001,120,true
+L002,C002,80,true
+L003,C004,0,false

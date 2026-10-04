@@ -1,0 +1,64 @@
+erDiagram
+  CUSTOMER ||--o{ SALES_ORDER : places
+  STORE ||--o{ SALES_ORDER : fulfills
+  SALES_ORDER ||--|{ ORDER_LINE : contains
+  PRODUCT ||--o{ ORDER_LINE : sold_as
+  SALES_ORDER ||--o{ PAYMENT : settled_by
+  CUSTOMER ||--o| LOYALTY_ACCOUNT : may_have
+  SUPPLIER ||--o{ SUPPLIER_PRODUCT : offers
+  PRODUCT ||--o{ SUPPLIER_PRODUCT : sourced_as
+
+  CUSTOMER {
+    uuid customer_id PK
+    string source_system_id
+    string source_record_id
+    string display_name
+    string verified_phone
+    string consent_state
+  }
+  PRODUCT {
+    bigint product_id PK
+    string canonical_sku UK
+    string product_name
+    string category_code
+    string unit_code
+  }
+  STORE {
+    bigint store_id PK
+    string store_code UK
+    string district_code
+    string channel_code
+  }
+  SALES_ORDER {
+    bigint order_id PK
+    string source_order_id
+    bigint store_id FK
+    uuid customer_id FK
+    datetime ordered_at
+    string currency_code
+  }
+  ORDER_LINE {
+    bigint order_id PK, FK
+    int line_number PK
+    bigint product_id FK
+    decimal quantity
+    decimal net_amount
+  }
+  PAYMENT {
+    bigint payment_id PK
+    bigint order_id FK
+    string tender_type
+    string provider_reference
+    decimal paid_amount
+  }
+  SUPPLIER {
+    bigint supplier_id PK
+    string supplier_code UK
+    string supplier_name
+  }
+  SUPPLIER_PRODUCT {
+    bigint supplier_id PK, FK
+    bigint product_id PK, FK
+    string supplier_sku
+    decimal pack_size
+  }

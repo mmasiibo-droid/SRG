@@ -1,0 +1,21 @@
+rule_id,domain,rule,action,owner,severity
+V01,Customer,Source system and stable source record ID are required,Reject online; queue offline with reason,IT lead,Critical
+V02,Customer,Phone is parsed to country-aware canonical form; invalid values are not guessed,Review queue; preserve source value,Customer steward,High
+V03,Customer,District maps to the approved district reference,Review queue; do not auto-correct unknown values,Customer steward,Medium
+V04,Customer,Date formats are source-specific and ambiguous dates are rejected,Quarantine for source confirmation,IT lead,High
+V05,Customer,Email syntax and verification state are separate attributes,Reject invalid syntax; do not infer verified status,Customer owner,Medium
+V06,Customer,Consent or lawful-purpose evidence is recorded per purpose and channel,Block optional marketing use without approved basis,Privacy focal,High
+V07,Customer,Identity match requires exact crosswalk or threshold plus independent evidence,Human review; no destructive automatic merge,Customer steward,Critical
+V08,Product,Canonical SKU resolves to one active product or an approved alias,Quarantine unresolved SKU,Product owner,High
+V09,Product,Unit of measure belongs to the approved unit vocabulary,Reject or steward-map with audit,Product steward,High
+V10,Product,Category is selected from the current category reference,Reject unknown code,Product steward,Medium
+V11,Sales,Order ID and line number form a stable idempotency key,Reject duplicate conflicting payload; retry safely,IT lead,Critical
+V12,Sales,Quantity is numeric; negative quantities require a return/void reason,Quarantine invalid or unexplained negative,Sales owner,High
+V13,Sales,Currency is an explicit ISO 4217 code and amount has valid precision,Quarantine unknown currency or malformed amount,Finance owner,Critical
+V14,Sales,Payment reference is unique per provider unless a documented reversal/split explains reuse,Exception queue and reconcile,Finance owner,High
+V15,Sales,Order timestamp has a timezone or a documented source timezone,Quarantine ambiguous timestamps,Sales owner,High
+V16,Inventory,Stock event carries SKU,store,unit,event ID and source timestamp,Reject or queue incomplete event,Inventory owner,High
+V17,Inventory,Inventory adjustment has reason code,requester and approver,Block unapproved write,Inventory owner,High
+V18,Supplier,Incoming workbook has sender,receipt time,checksum and approved schema,Quarantine until procurement steward approves,Procurement owner,Medium
+V19,HR,HR extract includes only approved fields for a named purpose,Block unapproved columns and recipients,HR owner,High
+V20,Footfall,Sensor payload contains aggregate counts and no stable person identifier,Reject identifying payload; escalate to privacy focal,Store owner,High

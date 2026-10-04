@@ -1,0 +1,8 @@
+﻿"source_system","source_order_id","line_number","source_customer_id","source_sku","canonical_sku","store_code","order_date","quantity","unit_price","net_amount","currency_code","payment_reference","payment_reference_review","channel","return_reason"
+"POS","P001","1","C001","SNK-001","SNK-001","KLA01","2026-01-04","2","4500","9000","UGX","MM001","False","POS",""
+"E-COMMERCE","P003","1","C003","DRK-003","DRK-003","GUL01","2026-01-11","3","3000","9000","UGX","WEB003","False","E-COMMERCE",""
+"POS","P004","1","C004","HOM-004","HOM-004","JIN01","2026-02-12","1","12000","12000","UGX","MM004","False","POS",""
+"POS","P005","1","C005","GRN-005","GRN-005","MBR01","2026-02-15","-1","2500","-2500","UGX","MM005","False","POS","Customer return"
+"POS","P006","1","C006","SNK-001","SNK-001","KLA01","2026-02-18","1","4500","4500","UGX","","True","POS",""
+"POS","P007","1","C007","DRK-002","DRK-002","KLA01","2026-03-02","2","3200","6400","UGX","MM007","False","POS",""
+"E-COMMERCE","P008","1","C008","HOM-004","HOM-004","JIN01","2026-03-04","1","12000","12000","UGX","WEB008","False","E-COMMERCE",""

@@ -1,0 +1,5 @@
+[
+  {"event_id":"demo-event-001","store_id":"KLA01","event_time":"2026-03-04T10:00:00Z","count_delta":5,"sensor_zone":"entrance"},
+  {"event_id":"demo-event-002","store_id":"KLA01","event_time":"2026-03-04T10:01:00Z","count_delta":3,"sensor_zone":"entrance"},
+  {"event_id":"demo-event-003","store_id":"JIN01","event_time":"2026-03-04T10:00:00Z","count_delta":2,"sensor_zone":"entrance"}
+]
